@@ -13,4 +13,5 @@ const fetchCities = dispatch => (cities) => {
     dispatch({type:"fetch_cities", payload : cities})
 }
 
+
 export const {Context, Provider} = createDataContext(citiesReducer, {fetchCities}, { cities : []})
