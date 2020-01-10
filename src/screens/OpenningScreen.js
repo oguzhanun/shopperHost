@@ -2,7 +2,7 @@ import React,{useEffect, useState, useContext} from "react"
 import {Text, View, StyleSheet, ActivityIndicator, BackHandler} from "react-native"
 import SafeAreaView from "react-native-safe-area-view"
 import NetInfo from "@react-native-community/netinfo"
-import axios from "axios"
+import axiosInstance from "../api/axiosInstance"
 import {Context as AllInfoContext} from "../contexts/AllInfoContext"
 import {Context as CitiesContext} from "../contexts/CitiesContext"
 import {NavigationEvents} from "react-navigation"
@@ -18,7 +18,7 @@ const OpenningScreen = (props)=>{
         //Check the internet connection...
         //Send a request to backend for the data...
 
-        if(counter == 0){NetInfo.fetch().then(async state => {
+        if(counter <= 1){NetInfo.fetch().then(async state => {
             
             console.log('Connection type', state.type);
             console.log('Is connected?', state.isConnected);
@@ -26,18 +26,12 @@ const OpenningScreen = (props)=>{
             if(state.isConnected){
 
                 //veritabanından distinct şehirleri çekiyoruz.
-                const result = await axios({
-                    method:"get",
-                    url:"http://192.168.1.7:3001/shops/sehirler"
-                })
+                const result = await axiosInstance.get("/sehirler")
 
                 fetchCities(result.data)
                 
                 //burada tablo içinde ne var ne yok hepsini çekip result2 ye atıyoruz.
-                const result2 = await axios({
-                    method : "get",
-                    url : "http://192.168.1.7:3001/shops/allPlacesInfo"
-                })
+                const result2 = await axiosInstance.get("/allPlacesInfo")
 
                 //bu metod ile tüm verileri alıp context içine koyuyoruz. ama şimdilik bunu
                 //kullanmak yerine her ekrana özel veriyi çekip kullanma yöntemini kullanacağız.
@@ -57,11 +51,14 @@ const OpenningScreen = (props)=>{
         setTimeout(()=>{
                 props.navigation.navigate("Cities")
             },
-        2000)}
+        1800)}
         if(counter >1){
             console.log("--GOBACK METHOD")
             console.log(counter)
             
+            setCounter(1)
+            setMessage("")
+
             BackHandler.exitApp();
 
         }
@@ -73,7 +70,7 @@ const OpenningScreen = (props)=>{
     const timeoutMessage = ()=>{
         setTimeout(()=>{
             setMessage("GOODBYE WE WILL MISS YOU :(")
-        },3000)
+        },2500)
         return message
     }
     return(
