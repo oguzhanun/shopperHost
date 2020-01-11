@@ -1,5 +1,5 @@
 import React,{useState, useContext, useEffect} from "react"
-import {View, Text} from "react-native"
+import {View, Text,Image} from "react-native"
 import {Context as AllInfoContext} from "../contexts/AllInfoContext"
 
 const InfoScreen = (props) => {
@@ -52,6 +52,8 @@ const InfoScreen = (props) => {
             <Text>{bolge}</Text>
             <Text>{sehir}</Text>
             <Text>{thePlace.bilgi}</Text>
+
+            <Image style={{width:200, height:200}} source={{uri:`http://192.168.43.9:3001${thePlace.resim1}`}}/>
         </View>
     )
 }
