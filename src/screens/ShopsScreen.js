@@ -1,61 +1,72 @@
-import React, {useState, useEffect} from "react"
-import {View, Text, Button} from "react-native"
-import axiosInstance from "../api/axiosInstance"
-import { FlatList } from "react-native-gesture-handler"
+import React, { useState, useEffect } from "react";
+import { View, Text, Button } from "react-native";
+import axiosInstance from "../api/axiosInstance";
+import { FlatList } from "react-native-gesture-handler";
+import NetInfo from "@react-native-community/netinfo";
 
+const ShopsScreen = ({ navigation }) => {
+  const [shops, setShops] = useState([]);
+  const [sehir, setSehir] = useState([]);
+  const [category, setCategory] = useState([]);
 
-const ShopsScreen = ({navigation}) => {
+  useEffect(() => {
+    NetInfo.fetch().then(async state => {
+      if (state.isConnected) {
+        const { sehir, kategori } = navigation.getParam("data");
 
-    const [shops, setShops] = useState([])
-    const [sehir, setSehir] = useState([])
-    const [bolge, setBolge] = useState([])
-    const [category, setCategory] = useState([])
+        if (sehir) {
+          await setSehir(sehir);
+        }
+        if (kategori) {
+          await setCategory(kategori);
+        }
 
-    useEffect( () => {
+        const result = await axiosInstance.get(
+          `/dukkanlar/${sehir}/${kategori}`
+        );
 
-        (async function fetchBolgeler(){
-        
-            const {sehir, bolge, kategori} = navigation.getParam("data")
-            console.log(sehir)
-            console.log(bolge)
-            console.log(kategori)
+        if (result.data) {
+          await setShops(result.data);
+        }
+      } else {
+        return (
+          <View>
+            <Text>Please Check Your Internet Connection!</Text>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+        );
+      }
+    });
+  }, []);
 
-            setSehir(sehir)
-            setBolge(bolge)
-            setCategory(kategori)
-            
-            const result = await axiosInstance.get(`/dukkanlar/${sehir}/${bolge}/${kategori}`)
-
-            setShops(result.data)
-        })()
-    },[ ])
-
-    return(
-        <View>
-            <Text>This is ShopsScreen...</Text>
-            <FlatList
-                data={shops}
-                keyExtractor={(item)=>{return item.isim}}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item})=>{
-                    return(
-                        <View style={{marginBottom:10}}>
-                            <Button title={item.isim} 
-                                    onPress={()=>{navigation.navigate("Info", {
-                                        data:{
-                                            sehir:sehir,
-                                            bolge:bolge,
-                                            category : category,
-                                            shop : item.isim
-                                        }
-                                    })}}/>
-                        </View>
-                    )
+  return (
+    <View>
+      <Text>This is ShopsScreen...</Text>
+      <FlatList
+        data={shops}
+        keyExtractor={item => {
+          return item.isim;
+        }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          return (
+            <View style={{ marginBottom: 10 }}>
+              <Button
+                title={item.isim}
+                onPress={() => {
+                  navigation.navigate("Info", {
+                    data: {
+                      shopId: item.id
+                    }
+                  });
                 }}
-            />
-        </View>
-    )
-}
+              />
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
+};
 
-
-export default ShopsScreen
+export default ShopsScreen;

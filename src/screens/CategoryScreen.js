@@ -1,60 +1,67 @@
-import React,{useState, useEffect} from "react"
-import {View, Text, Button} from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-import axiosInstance from "../api/axiosInstance"
+import React, { useState, useEffect } from "react";
+import { View, Text, Button } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import axiosInstance from "../api/axiosInstance";
+import NetInfo from "@react-native-community/netinfo";
 
+const CategoryScreen = ({navigation}) => {
+  const [categories, setCategories] = useState([]);
+  const [sehir, setSehir] = useState([]);
 
-const CategoryScreen = (props) => {
+  useEffect(() => {
+    NetInfo.fetch().then(async state => {
+			if (state.isConnected) {
+				const sehir = navigation.getParam("sehir");
+				
+				if(sehir){
+					await setSehir(sehir);
+				}
 
-    const [categories, setCategories] = useState([])
-    const [sehir, setSehir] = useState([])
-    const [bolge, setBolge] = useState([])
-    
-    useEffect( () => {
+				const result = await axiosInstance.get(`/kategoriler/${sehir}`);
+				
+				if(result.data){
+					setCategories(result.data)
+				}
+			} else {
+        return (
+          <View>
+            <Text>Please Check Your Internet Connection!</Text>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+        );
+      }
+		})
+	}, []);
 
-        (async function fetchBolgeler(){
-        
-            const {sehir, bolge} = props.navigation.getParam("data")
-            console.log(sehir)
-            console.log(bolge)
-            
-            setBolge(bolge)
-            setSehir(sehir)
-
-            const result = await axiosInstance.get(`/kategoriler/${sehir}/${bolge}`)
-
-            setCategories(result.data)
-        })()
-    },[ ])
-
-    return(
-        <View>
-            <Text>
-                This is the CategoryScreen...
-            </Text>
-            <FlatList
-                data={categories}
-                keyExtractor={(item)=>{return item.kategori}}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item})=>{
-                    return(
-                        <View style={{marginBottom:10}}>
-                            <Button title={item.kategori} 
-                                    onPress={()=>{
-                                        props.navigation.navigate("Shops", 
-                                                            {data:{
-                                                                sehir:sehir,
-                                                                bolge:bolge,
-                                                                kategori:item.kategori
-                                                            }})
-                                    }}/>
-                        </View>
-                    )
+  return (
+    <View>
+      <Text>This is the CategoryScreen...</Text>
+      <FlatList
+        data={categories}
+        keyExtractor={item => {
+          return item.kategori;
+        }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => {
+          return (
+            <View style={{ marginBottom: 10 }}>
+              <Button
+                title={item.kategori}
+                onPress={() => {
+                  navigation.navigate("Shops", {
+                    data: {
+                      sehir: sehir,
+                      kategori: item.kategori
+                    }
+                  });
                 }}
-            />
-        </View>
-    )
-}
+              />
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
+};
 
-
-export default CategoryScreen
+export default CategoryScreen;
