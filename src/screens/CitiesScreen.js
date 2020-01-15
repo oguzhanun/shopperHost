@@ -8,9 +8,14 @@ import LanguageContext from "../contexts/LanguageContext";
 const CitiesScreen = ({navigation}) => {
   const {state} = useContext(LanguageContext)
   console.log(state)
-	const [cities, setCities] = useState([])
+  const [cities, setCities] = useState([])
+  
 	
+  
   useEffect(() => {
+    
+    navigation.navigate("Cities", { lang : state.language });
+
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         const result = await axiosInstance.get("/sehirler");
@@ -54,5 +59,12 @@ const CitiesScreen = ({navigation}) => {
     </View>
   );
 };
+
+CitiesScreen.navigationOptions = ({navigation})=>{
+  
+  return {
+    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
+  }
+}
 
 export default CitiesScreen;

@@ -1,15 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext} from "react";
 import { View, Text, Button } from "react-native";
 import axiosInstance from "../api/axiosInstance";
 import { FlatList } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
+import LanguageContext from "../contexts/LanguageContext";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
   const [sehir, setSehir] = useState([]);
   const [category, setCategory] = useState([]);
+  const {state} = useContext(LanguageContext)
 
   useEffect(() => {
+    
+    navigation.navigate("Shops", {lang : state.language})
+
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         const { sehir, kategori } = navigation.getParam("data");
@@ -68,5 +73,11 @@ const ShopsScreen = ({ navigation }) => {
     </View>
   );
 };
+
+ShopsScreen.navigationOptions = ({navigation})=>{
+  return {
+    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
+  }
+}
 
 export default ShopsScreen;

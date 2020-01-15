@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
+import LanguageContext from "../contexts/LanguageContext";
 
 const CategoryScreen = ({navigation}) => {
   const [categories, setCategories] = useState([]);
   const [sehir, setSehir] = useState([]);
+  const {state} = useContext(LanguageContext)
 
   useEffect(() => {
+
+    navigation.navigate("Category", { lang : state.language });
+
     NetInfo.fetch().then(async state => {
 			if (state.isConnected) {
 				const sehir = navigation.getParam("sehir");
@@ -63,5 +68,11 @@ const CategoryScreen = ({navigation}) => {
     </View>
   );
 };
+
+CategoryScreen.navigationOptions = ({navigation})=>{
+  return {
+    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
+  }
+}
 
 export default CategoryScreen;
