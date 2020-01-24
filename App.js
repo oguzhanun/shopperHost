@@ -7,6 +7,7 @@ import CategoryScreen from "./src/screens/CategoryScreen";
 import ShopsScreen from "./src/screens/ShopsScreen";
 import InfoScreen from "./src/screens/InfoScreen";
 import { LanguageProvider } from "./src/contexts/LanguageContext";
+import SettingsScreen from "./src/screens/SettingsScreen";
 
 const navigator = createStackNavigator(
   {
@@ -14,7 +15,8 @@ const navigator = createStackNavigator(
     Cities: CitiesScreen,
     Category: CategoryScreen,
     Shops: ShopsScreen,
-    Info: InfoScreen
+    Info: InfoScreen,
+    Settings: SettingsScreen
   },
   {
     initialRouteName: "Openning",
@@ -27,10 +29,9 @@ const navigator = createStackNavigator(
 const App = createAppContainer(navigator);
 
 export default () => {
-
-  return(
+  return (
     <LanguageProvider>
       <App />
-    </LanguageProvider>  
-  )
+    </LanguageProvider>
+  );
 };

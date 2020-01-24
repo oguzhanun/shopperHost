@@ -1,28 +1,30 @@
-import React, { useContext, useEffect,useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Button, ActivityIndicator } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+//import AsyncStorage from '@react-native-community/async-storage'
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
+import { NavigationEvents } from "react-navigation";
+import {MaterialIcons} from "@expo/vector-icons";
 
-const CitiesScreen = ({navigation}) => {
-  const {state} = useContext(LanguageContext)
-  console.log(state)
-  const [cities, setCities] = useState([])
-  
-	
-  
+const CitiesScreen = ({ navigation }) => {
+  const [cities, setCities] = useState([]);
+  const { state } = useContext(LanguageContext);
+  // const [step, setStep] = useState()
   useEffect(() => {
-    
-    navigation.navigate("Cities", { lang : state.language });
+
+    navigation.navigate("Cities", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
+      
       if (state.isConnected) {
         const result = await axiosInstance.get("/sehirler");
-				console.log("Şehirler : ", result.data);
-				if(result.data){
-					await setCities(result.data)
-				}
+        //console.log("Şehirler : ", result.data);
+        
+        if (result.data) {
+          await setCities(result.data);
+        }
       } else {
         return (
           <View>
@@ -36,7 +38,13 @@ const CitiesScreen = ({navigation}) => {
 
   return (
     <View>
-      <Text>Hello from CitiesScreen</Text>
+      {/* <NavigationEvents
+        onDidFocus={ async () => {
+          navigation.navigate("Cities", { lang: state.language });
+          // const sth = state.language
+          // await setStep(sth)
+        }}
+      /> */}
       <FlatList
         data={cities}
         showsVerticalScrollIndicator={false}
@@ -60,11 +68,29 @@ const CitiesScreen = ({navigation}) => {
   );
 };
 
-CitiesScreen.navigationOptions = ({navigation})=>{
-  
+CitiesScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
-  }
-}
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Settings");
+        }}
+      >
+        <View
+          style={{
+            marginRight: 10,
+            borderColor: "grey",
+            borderWidth: 0,
+            padding: 0,
+            borderRadius: 4
+          }}
+        >
+          {/* <Text>{navigation.getParam("lang")}</Text> */}
+          <MaterialIcons name="settings" style={{color:"grey"}} size={30}/>
+        </View>
+      </TouchableOpacity>
+    )
+  };
+};
 
 export default CitiesScreen;

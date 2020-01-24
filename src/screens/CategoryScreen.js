@@ -1,33 +1,98 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
+import { NavigationEvents } from "react-navigation";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const CategoryScreen = ({navigation}) => {
+const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [sehir, setSehir] = useState([]);
-  const {state} = useContext(LanguageContext)
+  const { state } = useContext(LanguageContext);
+  const [language, setLanguage] = useState(state.language);
 
   useEffect(() => {
-
-    navigation.navigate("Category", { lang : state.language });
+    navigation.navigate("Category", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
-			if (state.isConnected) {
-				const sehir = navigation.getParam("sehir");
-				
-				if(sehir){
-					await setSehir(sehir);
-				}
+      if (state.isConnected) {
+        const sehir = navigation.getParam("sehir");
 
-				const result = await axiosInstance.get(`/kategoriler/${sehir}`);
-				
-				if(result.data){
-					setCategories(result.data)
-				}
-			} else {
+        if (sehir) {
+          await setSehir(sehir);
+        }
+
+        let kategori = "kategori";
+
+        switch (language) {
+          case "TR":
+            kategori = "kategori";
+            break;
+          case "EN":
+            kategori = "kategoriEN";
+            break;
+          case "AR":
+            kategori = "kategoriAR";
+            break;
+          case "DE":
+            kategori = "kategoriDE";
+            break;
+          case "RU":
+            kategori = "kategoriRU";
+            break;
+          default:
+            kategori = "kategori";
+        }
+
+        const result = await axiosInstance.get(
+          `/kategoriler/${kategori}/${sehir}`
+        );
+
+        if (result.data) {
+          let dataAdjusted = result.data;
+
+          switch (language) {
+            case "TR":
+              dataAdjusted = result.data;
+              break;
+            case "EN":
+              dataAdjusted = result.data.map(dat => {
+                if (dat.kategoriEN) dat.kategori = dat.kategoriEN;
+                delete dat.kategoriEN;
+                return dat;
+              });
+              break;
+            case "AR":
+              dataAdjusted = result.data.map(dat => {
+                if (dat.kategoriAR) dat.kategori = dat.kategoriAR;
+                delete dat.kategoriAR;
+                return dat;
+              });
+              break;
+            case "DE":
+              dataAdjusted = result.data.map(dat => {
+                if (dat.kategoriDE) dat.kategori = dat.kategoriDE;
+                delete dat.kategoriDE;
+                return dat;
+              });
+              break;
+            case "RU":
+              dataAdjusted = result.data.map(dat => {
+                if (dat.kategoriRU) dat.kategori = dat.kategoriRU;
+                delete dat.kategoriRU;
+                return dat;
+              });
+              break;
+            default:
+              dataAdjusted = result.data;
+          }
+
+          setCategories(dataAdjusted);
+          console.log("YENI KATEGORILER : ", dataAdjusted);
+        }
+      } else {
         return (
           <View>
             <Text>Please Check Your Internet Connection!</Text>
@@ -35,12 +100,11 @@ const CategoryScreen = ({navigation}) => {
           </View>
         );
       }
-		})
-	}, []);
+    });
+  }, [language]);
 
   return (
     <View>
-      <Text>This is the CategoryScreen...</Text>
       <FlatList
         data={categories}
         keyExtractor={item => {
@@ -65,14 +129,39 @@ const CategoryScreen = ({navigation}) => {
           );
         }}
       />
+      <NavigationEvents
+        onDidFocus={() => {
+          setLanguage(state.language);
+          //navigation.navigate("Category", { lang: state.language });
+        }}
+      />
     </View>
   );
 };
 
-CategoryScreen.navigationOptions = ({navigation})=>{
+CategoryScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
-  }
-}
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Settings");
+        }}
+      >
+        <View
+          style={{
+            marginRight: 10,
+            borderColor: "grey",
+            borderWidth: 0,
+            padding: 0,
+            borderRadius: 4
+          }}
+        >
+          {/* <Text>{navigation.getParam("lang")}</Text> */}
+          <MaterialIcons name="settings" style={{ color: "grey" }} size={30} />
+        </View>
+      </TouchableOpacity>
+    )
+  };
+};
 
 export default CategoryScreen;

@@ -1,19 +1,20 @@
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Button } from "react-native";
 import axiosInstance from "../api/axiosInstance";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
+import { NavigationEvents } from "react-navigation";
+import {MaterialIcons} from "@expo/vector-icons";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
   const [sehir, setSehir] = useState([]);
   const [category, setCategory] = useState([]);
-  const {state} = useContext(LanguageContext)
+  const { state } = useContext(LanguageContext);
 
   useEffect(() => {
-    
-    navigation.navigate("Shops", {lang : state.language})
+    navigation.navigate("Shops", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
@@ -46,7 +47,11 @@ const ShopsScreen = ({ navigation }) => {
 
   return (
     <View>
-      <Text>This is ShopsScreen...</Text>
+      {/* <NavigationEvents
+        onDidFocus={() => {
+          navigation.navigate("Shops", { lang: state.language });
+        }}
+      /> */}
       <FlatList
         data={shops}
         keyExtractor={item => {
@@ -74,10 +79,29 @@ const ShopsScreen = ({ navigation }) => {
   );
 };
 
-ShopsScreen.navigationOptions = ({navigation})=>{
+ShopsScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
-  }
-}
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("Settings");
+        }}
+      >
+        <View
+          style={{
+            marginRight: 10,
+            borderColor: "grey",
+            borderWidth: 0,
+            padding: 0,
+            borderRadius: 4
+          }}
+        >
+          {/* <Text>{navigation.getParam("lang")}</Text> */}
+          <MaterialIcons name="settings" style={{color:"grey"}} size={30}/>
+        </View>
+      </TouchableOpacity>
+    )
+  };
+};
 
 export default ShopsScreen;
