@@ -13,7 +13,7 @@ const languageReducer = (state, action) => {
 
 export const LanguageProvider = ({ children }) => {
   const [state, dispatch] = useReducer(languageReducer, {
-    language: ""
+    language: "TR"
   });
 
   const changeLanguage = (language) => {

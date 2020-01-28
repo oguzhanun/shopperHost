@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Image, Dimensions } from "react-native";
+import { View, Image, Dimensions, AsyncStorage } from "react-native";
 import { Card, Button, Text } from "react-native-elements";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import SafeAreaView from "react-native-safe-area-view";
@@ -23,8 +23,9 @@ const InfoScreen = ({ navigation }) => {
 
   useEffect(() => {
     // navigation.navigate("Info", { lang: state.language });
-
+    
     NetInfo.fetch().then(async state => {
+      console.log("Async Storage :", await AsyncStorage.getItem("deviceLang"))
       if (state.isConnected) {
         const { shopId } = navigation.getParam("data");
 
@@ -77,12 +78,20 @@ const InfoScreen = ({ navigation }) => {
   }, [language]);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView forceInset={{top:"never"}} style={{ flex: 1, 
+                                                  borderColor:"red", borderWidth:0, margin:0, paddingTop:0 }}>
       <View
         style={{
           flex: 1,
+          // position:"absolute",
+          // top:0,
+          // left:0,
           justifyContent: "space-between",
-          alignContent: "center"
+          alignContent: "center",
+          borderColor:"green",
+          borderWidth:0,
+          marginTop:10,
+          paddingTop:0
         }}
       >
         <Card
@@ -92,6 +101,8 @@ const InfoScreen = ({ navigation }) => {
           containerStyle={{
             backgroundColor: "#fff",
             flex: 1,
+            marginTop:0,
+            paddingTop:0,
             borderRadius: 10
           }}
         >
@@ -124,11 +135,11 @@ const InfoScreen = ({ navigation }) => {
                   <Image
                     style={{
                       width: sliderWidth * 0.85,
-                      height: height * 0.3,
+                      height: height * 0.32,
                       borderRadius: 5,
                       marginHorizontal: 0
                     }}
-                    source={{ uri: `http://192.168.1.10:3001${item.resim}` }}
+                    source={{ uri: `http://192.168.1.8:3001${item.resim}` }}
                   />
                 </View>
               );
@@ -142,8 +153,8 @@ const InfoScreen = ({ navigation }) => {
             dotsLength={3}
             dotColor="black"
             dotStyle={{
-              width: 13,
-              height: 13,
+              width: 11,
+              height: 11,
               borderRadius: 5,
               marginHorizontal: 0
             }}
@@ -168,7 +179,7 @@ const InfoScreen = ({ navigation }) => {
           >
             <FlatList
               style={{
-                height: height * 0.363,
+                height: height * 0.33,
                 marginVertical: 10,
                 borderColor: "red",
                 borderWidth: 0,

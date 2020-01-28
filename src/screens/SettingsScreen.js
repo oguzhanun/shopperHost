@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { Text, Picker, View, Dimensions } from "react-native";
+import { Text, Picker, View, Dimensions, AsyncStorage } from "react-native";
 import LanguageContext from "../contexts/LanguageContext";
 import SafeAreaView from "react-native-safe-area-view";
 import * as SQLite from "expo-sqlite";
+
 
 const SettingsScreen = () => {
   const { state, changeLanguage } = useContext(LanguageContext);
@@ -20,18 +21,24 @@ const SettingsScreen = () => {
             width: width * 0.33,
             marginHorizontal: 20,
             borderColor: "black",
-            borderWidth: 3
+            borderWidth: 0
           }}
           onValueChange={async (itemValue, itemIndex) => {
             changeLanguage(itemValue);
+            await AsyncStorage.setItem("deviceLang",itemValue)
             const db = await SQLite.openDatabase("shopperHostDB");
 
             await db.transaction(tx => {
               tx.executeSql(`update setting set language = ? where id = 1;`, [
-                `${itemValue.toLowerCase()}_${itemValue}`,
+                `${itemValue}`,
               ]);
               console.log(itemValue)
             });
+
+            await db.transaction(tx => tx.executeSql(`select * from setting`, [], async (tx, set) => {
+                console.log("set-->:",set)
+              })
+            )
             
           }}
         >

@@ -1,27 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Button, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  ActivityIndicator,
+  Image,
+  Dimensions
+} from "react-native";
 //import AsyncStorage from '@react-native-community/async-storage'
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
-import { NavigationEvents } from "react-navigation";
-import {MaterialIcons} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const CitiesScreen = ({ navigation }) => {
+  const widthOfScreen = Dimensions.get("window").width;
+  const heightOfScreen = Dimensions.get("window").height;
+
   const [cities, setCities] = useState([]);
   const { state } = useContext(LanguageContext);
   // const [step, setStep] = useState()
   useEffect(() => {
-
     navigation.navigate("Cities", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
-      
       if (state.isConnected) {
         const result = await axiosInstance.get("/sehirler");
         //console.log("Şehirler : ", result.data);
-        
+
         if (result.data) {
           await setCities(result.data);
         }
@@ -38,13 +45,6 @@ const CitiesScreen = ({ navigation }) => {
 
   return (
     <View>
-      {/* <NavigationEvents
-        onDidFocus={ async () => {
-          navigation.navigate("Cities", { lang: state.language });
-          // const sth = state.language
-          // await setStep(sth)
-        }}
-      /> */}
       <FlatList
         data={cities}
         showsVerticalScrollIndicator={false}
@@ -52,14 +52,70 @@ const CitiesScreen = ({ navigation }) => {
           return item.sehir;
         }}
         renderItem={({ item }) => {
+          //let source=`../../assets/images/sehirler/${item.sehir}.jpg`
+          let source;
+          switch (item.sehir.toLowerCase()) {
+            case "istanbul":
+              source = require("../../assets/images/sehirler/istanbul.jpg");
+              break;
+            case "ankara":
+              source = require("../../assets/images/sehirler/ankara.jpg");
+              break;
+            case "izmir":
+              source = require("../../assets/images/sehirler/izmir.jpg");
+              break;
+            case "trabzon":
+              source = require("../../assets/images/sehirler/trabzon.jpg");
+              break;
+            case "bursa":
+              source = require("../../assets/images/sehirler/bursa.jpg");
+              break;
+            case "yalova":
+              source = require("../../assets/images/sehirler/yalova.jpg");
+              break;
+            case "sakarya":
+              source = require("../../assets/images/sehirler/sakarya.jpg");
+              break;
+            default:
+              source = require("../../assets/images/sehirler/aCity.jpg");
+          }
+
           return (
-            <View style={{ marginBottom: 10 }}>
-              <Button
-                title={item.sehir}
+            <View style={{ marginBottom: 10, marginTop: 10 }}>
+              <TouchableOpacity
+                activeOpacity={1}
                 onPress={() => {
                   navigation.navigate("Category", { sehir: item.sehir });
                 }}
-              />
+              >
+                <View
+                  style={{ flex: 1, alignSelf: "center", position: "relative" }}
+                >
+                  <Image
+                    style={{
+                      borderRadius: 10,
+                      width: widthOfScreen * 0.95,
+                      height: heightOfScreen * 0.2
+                    }}
+                    source={source}
+                  />
+                  <Text
+                    style={{
+                      position: "absolute",
+                      top: heightOfScreen * 0.1,
+                      // left: widthOfScreen * 0.35,
+                      alignSelf: "center",
+                      fontWeight: "bold",
+                      color: "white",
+                      zIndex: 1,
+                      fontSize: 24
+                    }}
+                  >
+                    {item.sehir.charAt(0).toUpperCase() +
+                      item.sehir.substring(1)}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           );
         }}
@@ -86,7 +142,7 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
           }}
         >
           {/* <Text>{navigation.getParam("lang")}</Text> */}
-          <MaterialIcons name="settings" style={{color:"grey"}} size={30}/>
+          <MaterialIcons name="settings" style={{ color: "grey" }} size={30} />
         </View>
       </TouchableOpacity>
     )
