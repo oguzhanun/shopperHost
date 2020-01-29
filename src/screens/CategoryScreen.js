@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button, Image, Dimensions } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
@@ -12,6 +12,9 @@ const CategoryScreen = ({ navigation }) => {
   const [sehir, setSehir] = useState([]);
   const { state } = useContext(LanguageContext);
   const [language, setLanguage] = useState(state.language);
+
+  const widthOfScreen = Dimensions.get("window").width;
+  const heightOfScreen = Dimensions.get("window").height;
 
   useEffect(() => {
     navigation.navigate("Category", { lang: state.language });
@@ -112,10 +115,11 @@ const CategoryScreen = ({ navigation }) => {
         }}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
+          
           return (
             <View style={{ marginBottom: 10 }}>
-              <Button
-                title={item.kategori}
+              <TouchableOpacity
+                activeOpacity={1}
                 onPress={() => {
                   navigation.navigate("Shops", {
                     data: {
@@ -124,7 +128,21 @@ const CategoryScreen = ({ navigation }) => {
                     }
                   });
                 }}
-              />
+              >
+                <View
+                  style={{ flex: 1, alignSelf: "flex-start",marginLeft:10, position: "relative" }}
+                >
+                  <Text>{item.kategori}</Text>
+                  <Image
+                    style={{
+                      borderRadius: 10,
+                      width: widthOfScreen * 0.45,
+                      height: heightOfScreen * 0.2
+                    }}
+                    source={require("../../assets/images/kategoriler/genel.jpg")}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
           );
         }}
