@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button } from "react-native";
+import { View, Text, Button,Image } from "react-native";
 import axiosInstance from "../api/axiosInstance";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
 import {MaterialIcons} from "@expo/vector-icons";
+import { Linking } from "expo";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
@@ -14,7 +15,7 @@ const ShopsScreen = ({ navigation }) => {
   const { state } = useContext(LanguageContext);
 
   useEffect(() => {
-    navigation.navigate("Shops", { lang: state.language });
+    //navigation.navigate("Shops", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
@@ -33,6 +34,7 @@ const ShopsScreen = ({ navigation }) => {
 
         if (result.data) {
           await setShops(result.data);
+          console.log(result.data);
         }
       } else {
         return (
@@ -46,7 +48,7 @@ const ShopsScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View>
+    <View style={{marginTop:10}}>
       {/* <NavigationEvents
         onDidFocus={() => {
           navigation.navigate("Shops", { lang: state.language });
@@ -60,9 +62,9 @@ const ShopsScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
-            <View style={{ marginBottom: 10 }}>
-              <Button
-                title={item.isim}
+            <View style={{ marginBottom: 10, flex:1}}>
+              <TouchableOpacity
+                activeOpacity={0.9}
                 onPress={() => {
                   navigation.navigate("Info", {
                     data: {
@@ -70,7 +72,52 @@ const ShopsScreen = ({ navigation }) => {
                     }
                   });
                 }}
-              />
+              >
+                <View style={{ marginBottom: 10, 
+                  backgroundColor:"white", 
+                  flex:1, borderColor:"black", 
+                  borderRadius:10, borderWidth:0,  flexDirection:"row",marginHorizontal:10}}>
+                  <Image style={{
+                        resizeMode:"cover",
+                        borderWidth:0,
+                        width: 150,
+                        height: 130,
+                        borderRadius: 10,
+                        marginHorizontal: 10,
+                        marginVertical:10
+                      }} 
+                      source={{uri:`http://192.168.1.8:3001${item.resim3}`}}/>
+                  <View style={{
+                    alignItems:"flex-start",
+                    marginVertical:10,
+                    justifyContent:"space-evenly",
+                    borderColor:"black", 
+                    flex:1,
+                    paddingTop: 0, 
+                    borderLeftWidth:0,}}>
+                    <Text style={{marginLeft:10, fontSize:16, color:"#397DC6", fontWeight:"bold"}}>{item.isim.charAt(0).toUpperCase()+item.isim.substring(1)}</Text>
+                    <TouchableOpacity
+                      onPress={(e)=>{
+                        Linking.openURL(`tel:${item.telefon}`)
+                        e.stopPropagation()
+                      }}
+                    >
+                      <View>{
+                        item.telefon ?
+                            <View style={{flexDirection:"row"}}>
+                              <MaterialIcons style={{marginLeft:10,paddingTop:3}} color="green" size={16} name="phone"/>
+                              <Text style={{marginLeft:5, color:"black", fontWeight:"bold"}}>{item.telefon}</Text>
+                            </View>
+                          : <View>
+                            <Text style={{marginLeft:5, color:"black", fontWeight:"bold"}}>{item.telefon}</Text>
+                          </View>
+                      }
+                        
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
           );
         }}

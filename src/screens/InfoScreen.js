@@ -22,7 +22,7 @@ const InfoScreen = ({ navigation }) => {
   const [tap, setTap] = useState({});
 
   useEffect(() => {
-    // navigation.navigate("Info", { lang: state.language });
+    //navigation.navigate("Info", { lang: state.language });
     
     NetInfo.fetch().then(async state => {
       console.log("Async Storage :", await AsyncStorage.getItem("deviceLang"))
@@ -99,7 +99,7 @@ const InfoScreen = ({ navigation }) => {
           //   thePlace.isim == null ? thePlace.isim : thePlace.isim.toUpperCase()
           // }
           containerStyle={{
-            backgroundColor: "#fff",
+            backgroundColor: "#efefef",
             flex: 1,
             marginTop:0,
             paddingTop:0,
@@ -134,6 +134,7 @@ const InfoScreen = ({ navigation }) => {
                 >
                   <Image
                     style={{
+                      resizeMode:"contain",
                       width: sliderWidth * 0.85,
                       height: height * 0.32,
                       borderRadius: 5,
@@ -153,8 +154,8 @@ const InfoScreen = ({ navigation }) => {
             dotsLength={3}
             dotColor="black"
             dotStyle={{
-              width: 11,
-              height: 11,
+              width: 8,
+              height: 8,
               borderRadius: 5,
               marginHorizontal: 0
             }}
@@ -174,19 +175,19 @@ const InfoScreen = ({ navigation }) => {
               marginHorizontal: 0,
               borderRadius: 10,
               position: "relative",
-              bottom: 0
+              // bottom: 0, backgroundColor:"#efefef"
             }}
           >
             <FlatList
               style={{
-                height: height * 0.33,
+                height: height * 0.38,
                 marginVertical: 10,
                 borderColor: "red",
                 borderWidth: 0,
                 flexGrow: 1
               }}
               showsVerticalScrollIndicator={false}
-              data={[thePlace.resim1]}
+              data={[thePlace.isim]}
               keyExtractor={(item, index) => {
                 return index.toString();
               }}
@@ -196,6 +197,7 @@ const InfoScreen = ({ navigation }) => {
                     <Text
                       
                       style={{ 
+                        
                         textAlign: "center",
                         fontSize: 22,
                         fontWeight: "bold"
@@ -205,38 +207,54 @@ const InfoScreen = ({ navigation }) => {
                     </Text>
                     <View style={{ marginVertical: 10 }}></View>
 
-                    <Text style={{color:"grey"}}>{thePlace.bilgi}</Text>
+                    <Text style={{color:"black", textAlign:"justify"}}>{thePlace.bilgi}</Text>
                     <View style={{ marginVertical: 10 }}></View>
-                    <Text style={{color:"grey",}} >Tel: {thePlace.telefon}</Text>
+                    <TouchableOpacity
+                      onPress={(e)=>{
+                        Linking.openURL(`tel:${item.telefon}`)
+                      }}
+                    >
+                      {thePlace.telefon ? 
+                        <View style={{flexDirection:"row"}}>
+                          <MaterialIcons style={{marginLeft:0,paddingTop:3}} color="green" size={16} name="phone"/>
+                          <Text style={{color:"black",}} > {thePlace.telefon}</Text>
+                        </View>
+                        :
+                        null  
+                    }
+                      
+                    </TouchableOpacity>
                   </View>
                 );
               }}
             />
           </Card>
-        </Card>
-        <View style={{ marginTop: 10, marginHorizontal: 15 }}>
-          <Button
-            title={`GO TO  ${
-              thePlace.isim == null
-                ? thePlace.isim
-                : thePlace.isim.toUpperCase()
-            }`}
-            onPress={() => {
-              const scheme = Platform.select({
-                ios: "maps:0,0?q=",
-                android: "geo:0,0?q="
-              });
-              const latLng = `${thePlace.konum}`;
-              const label = `${thePlace.isim}`;
-              const url = Platform.select({
-                ios: `${scheme}${label}@${latLng}`,
-                android: `${scheme}${latLng}(${label})`
-              });
-              Linking.openURL(url);
-            }}
-          ></Button>
-          <View style={{ marginBottom: 20 }}></View>
+          <View style={{ marginTop: 20, zIndex:1, marginHorizontal: 0 }}>
+            <Button
+              buttonStyle={{backgroundColor: 'purple', borderRadius:10}}
+              title={`GO TO  ${
+                thePlace.isim == null
+                  ? thePlace.isim
+                  : thePlace.isim.toUpperCase()
+              }`}
+              onPress={() => {
+                const scheme = Platform.select({
+                  ios: "maps:0,0?q=",
+                  android: "geo:0,0?q="
+                });
+                const latLng = `${thePlace.konum}`;
+                const label = `${thePlace.isim}`;
+                const url = Platform.select({
+                  ios: `${scheme}${label}@${latLng}`,
+                  android: `${scheme}${latLng}(${label})`
+                });
+                Linking.openURL(url);
+              }}
+            />
+          {/* <View style={{ marginBottom: 20 }}></View> */}
         </View>
+        </Card>
+        
       </View>
       <NavigationEvents
         onDidFocus={() => {
