@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button,Image,PanResponder } from "react-native";
+import { View, Text, Image,PanResponder,Dimensions } from "react-native";
 import axiosInstance from "../api/axiosInstance";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
@@ -7,12 +7,15 @@ import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
 import {MaterialIcons} from "@expo/vector-icons";
 import { Linking } from "expo";
+import SafeAreaView from "react-native-safe-area-view";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
   const [sehir, setSehir] = useState([]);
   const [category, setCategory] = useState([]);
   const { state } = useContext(LanguageContext);
+  const widthOfScreen = Dimensions.get("window").width;
+  const heightOfScreen = Dimensions.get("window").height;
 
   const responder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -56,7 +59,7 @@ const ShopsScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={{marginTop:10}} {...responder.panHandlers}>
+    <SafeAreaView style={{marginTop:10}} {...responder.panHandlers}>
       {/* <NavigationEvents
         onDidFocus={() => {
           navigation.navigate("Shops", { lang: state.language });
@@ -70,7 +73,7 @@ const ShopsScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
-            <View style={{ marginBottom: 10, flex:1}}>
+            <View style={{ marginBottom: 5, flex:1}}>
               <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={() => {
@@ -88,8 +91,8 @@ const ShopsScreen = ({ navigation }) => {
                   <Image style={{
                         resizeMode:"cover",
                         borderWidth:0,
-                        width: 150,
-                        height: 130,
+                        width: widthOfScreen * 0.364,
+                        height: heightOfScreen * 0.16,
                         borderRadius: 10,
                         marginHorizontal: 10,
                         marginVertical:10
@@ -130,7 +133,7 @@ const ShopsScreen = ({ navigation }) => {
           );
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button, Image, Dimensions, ListView,PanResponder } from "react-native";
+import { View, Text, Image, Dimensions, PanResponder, StyleSheet,ActivityIndicator } from "react-native";
 import {
   FlatList,
-  TouchableOpacity,
-  TouchableHighlight
+  TouchableOpacity
 } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
 import { MaterialIcons } from "@expo/vector-icons";
-import { ListItem } from "react-native-elements";
-import { ListViewComponent } from "react-native";
+import SafeAreaView from "react-native-safe-area-view";
+
 
 const CategoryScreen = ( { navigation }) => {
   const [categories, setCategories] = useState([]);
   const [sehir, setSehir] = useState([]);
   const { state } = useContext(LanguageContext);
   const [language, setLanguage] = useState(state.language);
-
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
+  const [connection, setConnection] = useState(false);
 
   const responder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -30,12 +29,13 @@ const CategoryScreen = ( { navigation }) => {
     onPanResponderTerminationRequest: (evt, gestureState) => true,
   })
 
-
   useEffect(() => {
-    // navigation.navigate("Category", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
+
+        setConnection(true);
+
         const sehir = navigation.getParam("sehir");
 
         if (sehir) {
@@ -71,61 +71,34 @@ const CategoryScreen = ( { navigation }) => {
         );
 
         if (result.data) {
-          // let dataAdjusted = result.data;
-
-          // ŞUAN İÇİN BU İŞLEMEDE GEREK YOK. TÜRKÇE KATEGORİ YETERLİ DURUMDA...
-          // switch (language) {
-          //   case "TR":
-          //     dataAdjusted = result.data;
-          //     break;
-          //   case "EN":
-          //     dataAdjusted = result.data.map(dat => {
-          //       if (dat.kategoriEN) dat.kategori = dat.kategoriEN;
-          //       delete dat.kategoriEN;
-          //       return dat;
-          //     });
-          //     break;
-          //   case "AR":
-          //     dataAdjusted = result.data.map(dat => {
-          //       if (dat.kategoriAR) dat.kategori = dat.kategoriAR;
-          //       delete dat.kategoriAR;
-          //       return dat;
-          //     });
-          //     break;
-          //   case "DE":
-          //     dataAdjusted = result.data.map(dat => {
-          //       if (dat.kategoriDE) dat.kategori = dat.kategoriDE;
-          //       delete dat.kategoriDE;
-          //       return dat;
-          //     });
-          //     break;
-          //   case "RU":
-          //     dataAdjusted = result.data.map(dat => {
-          //       if (dat.kategoriRU) dat.kategori = dat.kategoriRU;
-          //       delete dat.kategoriRU;
-          //       return dat;
-          //     });
-          //     break;
-          //   default:
-          //     dataAdjusted = result.data;
-          // }
-
           setCategories(result.data);
           console.log("YENI KATEGORILER : ", result.data);
         }
-      } else {
-        return (
-          <View>
-            <Text>Please Check Your Internet Connection!</Text>
-            <ActivityIndicator size="large" color="#00ff00" />
-          </View>
-        );
       }
     });
   }, [language]);
 
   return (
-    <View {...responder.panHandlers}>
+    <SafeAreaView style={{flex:1, marginTop:5}}  {...responder.panHandlers}>
+      <NavigationEvents
+        onDidFocus={() => {
+          setLanguage(state.language);
+        }}
+      />
+      {connection ? null : (
+        <View
+          style={{
+            width:widthOfScreen,
+            position: "absolute",
+            zIndex: 1,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <ActivityIndicator size="large" color="#00ff00" />
+          <Text style={{color:"black", fontWeight:"bold"}}>Please Check Your Internet Connection!</Text>
+        </View>
+      )}
       <FlatList
         data={[{ category: "hi" }]}
         keyExtractor={item => {
@@ -137,9 +110,6 @@ const CategoryScreen = ( { navigation }) => {
             <View
               style={{
                 flex: 1,
-                
-                //height:heightOfScreen-60,
-                marginBottom: 10,
                 borderColor: "blue",
                 borderWidth: 0
               }}
@@ -232,18 +202,15 @@ const CategoryScreen = ( { navigation }) => {
                               />
                               <Text
                                 style={{
-                                  // position: "absolute",
-                                  alignSelf: "center",
-                                  // top: heightOfScreen * 0.22,
                                   fontWeight:"bold",
                                   color: "gold",
                                   zIndex: 1,
-                                  backgroundColor: "grey",
-                                  paddingHorizontal:10,
-                                  paddingVertical:3,
+                                  backgroundColor: "#aaa",
+                                  paddingHorizontal: widthOfScreen * 0.0243,
+                                  paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
                                   borderBottomRightRadius: 4,
-                                  width:widthOfScreen * 0.485
+                                  width : widthOfScreen * 0.485
                                 }}
                               >
                                 {kat.kategoriAR ? kat.kategoriAR.charAt(0).toUpperCase() + kat.kategoriAR.substring(1) : null ||
@@ -345,26 +312,22 @@ const CategoryScreen = ( { navigation }) => {
                                    resizeMode: "stretch",
                                   borderTopLeftRadius: 4,
                                   borderTopRightRadius:4,
-                                  width: widthOfScreen * 0.485, //widthOfScreen * 0.4,
-                                  height: specialHeight //heightOfScreen * 0.2
+                                  width: widthOfScreen * 0.485,
+                                  height: specialHeight
                                 }}
                                 source={source}
                               />
                               <Text
                                 style={{
-                                  // flex:1,
-                                  paddingHorizontal:10,
-                                  // position: "absolute",
-                                  alignSelf: "center",
-                                  // top: heightOfScreen * 0.22,
                                   fontWeight:"bold",
                                   color: "gold",
                                   zIndex: 1,
-                                  backgroundColor: "grey",
+                                  backgroundColor: "#aaa",
+                                  paddingHorizontal: widthOfScreen * 0.0243,
+                                  paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
                                   borderBottomRightRadius: 4,
-                                  paddingVertical:3,
-                                  width:widthOfScreen * 0.485
+                                  width : widthOfScreen * 0.485
                                 }}
                               >
                                 {kat.kategoriAR ? kat.kategoriAR.charAt(0).toUpperCase() + kat.kategoriAR.substring(1) : null ||
@@ -384,13 +347,7 @@ const CategoryScreen = ( { navigation }) => {
           );
         }}
       />
-      <NavigationEvents
-        onDidFocus={() => {
-          setLanguage(state.language);
-          //navigation.navigate("Category", { lang: state.language });
-        }}
-      />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -418,5 +375,14 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
     )
   };
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth: 0
+  }
+});
 
 export default CategoryScreen;

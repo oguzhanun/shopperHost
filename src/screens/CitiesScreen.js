@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
-  Button,
   ActivityIndicator,
   Image,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from "react-native";
 //import AsyncStorage from '@react-native-community/async-storage'
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -13,38 +13,47 @@ import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
 import { MaterialIcons } from "@expo/vector-icons";
+import SafeAreaView from "react-native-safe-area-view";
 
 const CitiesScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
-
   const [cities, setCities] = useState([]);
   const { state } = useContext(LanguageContext);
-  // const [step, setStep] = useState()
+  const [connection, setConnection] = useState(false);
+
   useEffect(() => {
     navigation.navigate("Cities", { lang: state.language });
 
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
-        const result = await axiosInstance.get("/sehirler");
-        //console.log("Şehirler : ", result.data);
 
+        setConnection(true)
+        const result = await axiosInstance.get("/sehirler");
+        
         if (result.data) {
           await setCities(result.data);
         }
-      } else {
-        return (
-          <View>
-            <Text>Please Check Your Internet Connection!</Text>
-            <ActivityIndicator size="large" color="#00ff00" />
-          </View>
-        );
       }
     });
   }, []);
 
   return (
-    <View>
+    <SafeAreaView forceInset={{ top: "never" }}>
+      {connection ? null : (
+        <View
+          style={{
+            width:widthOfScreen,
+            position: "absolute",
+            zIndex: 1,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <ActivityIndicator size="large" color="#00ff00" />
+          <Text style={{color:"white", fontWeight:"bold"}}>Please Check Your Internet Connection!</Text>
+        </View>
+      )}
       <FlatList
         data={cities}
         showsVerticalScrollIndicator={false}
@@ -120,7 +129,7 @@ const CitiesScreen = ({ navigation }) => {
           );
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -148,5 +157,14 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
     )
   };
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    borderColor: "red",
+    borderWidth: 0
+  }
+});
 
 export default CitiesScreen;

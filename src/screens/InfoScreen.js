@@ -17,15 +17,14 @@ const InfoScreen = ({ navigation }) => {
   const sliderWidth = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   const [language, setLanguage] = useState(state.language);
-  const itemWidth = sliderWidth - 0;
+  const itemWidth = sliderWidth ;
   const [index, setIndex] = useState(0);
   const [tap, setTap] = useState({});
 
   useEffect(() => {
-    //navigation.navigate("Info", { lang: state.language });
-    
+
     NetInfo.fetch().then(async state => {
-      console.log("Async Storage :", await AsyncStorage.getItem("deviceLang"))
+      console.log("Async Storage :", await AsyncStorage.getItem("deviceLang"));
       if (state.isConnected) {
         const { shopId } = navigation.getParam("data");
 
@@ -78,31 +77,38 @@ const InfoScreen = ({ navigation }) => {
   }, [language]);
 
   return (
-    <SafeAreaView forceInset={{top:"never"}} style={{ flex: 1, 
-                                                  borderColor:"red", borderWidth:0, margin:0, paddingTop:0 }}>
+    <SafeAreaView
+      forceInset={{ top: "never" }}
+      style={{
+        flex: 1,
+        borderColor: "red",
+        borderWidth: 0,
+        margin: 0,
+        paddingTop: 0
+      }}
+    >
+      <NavigationEvents
+        onDidFocus={() => {
+          setLanguage(state.language);
+        }}
+      />
       <View
         style={{
           flex: 1,
-          // position:"absolute",
-          // top:0,
-          // left:0,
           justifyContent: "space-between",
           alignContent: "center",
-          borderColor:"green",
-          borderWidth:0,
-          marginTop:10,
-          paddingTop:0
+          borderColor: "green",
+          borderWidth: 0,
+          marginTop: 10,
+          paddingTop: 0
         }}
       >
         <Card
-          // title={
-          //   thePlace.isim == null ? thePlace.isim : thePlace.isim.toUpperCase()
-          // }
           containerStyle={{
             backgroundColor: "#efefef",
             flex: 1,
-            marginTop:0,
-            paddingTop:0,
+            marginTop: 0,
+            paddingTop: 0,
             borderRadius: 10
           }}
         >
@@ -115,26 +121,20 @@ const InfoScreen = ({ navigation }) => {
             ]}
             renderItem={({ item, index }, parallaxProps) => {
               return (
-                // <ParallaxImage
-                //     source={{ uri:`http://192.168.1.10:3001${item.resim}`}}
-
-                //     parallaxFactor={0.4}
-                //     {...parallaxProps}
-                // />
                 <View
                   style={{
                     alignItems: "center",
                     borderColor: "red",
                     borderWidth: 0,
                     marginLeft: 0,
-                    marginRight: 60,
+                    marginRight: sliderWidth * 0.151,
                     paddingVertical: 10,
                     borderRadius: 5
                   }}
                 >
                   <Image
                     style={{
-                      resizeMode:"contain",
+                      resizeMode: "contain",
                       width: sliderWidth * 0.85,
                       height: height * 0.32,
                       borderRadius: 5,
@@ -174,7 +174,7 @@ const InfoScreen = ({ navigation }) => {
             containerStyle={{
               marginHorizontal: 0,
               borderRadius: 10,
-              position: "relative",
+              position: "relative"
               // bottom: 0, backgroundColor:"#efefef"
             }}
           >
@@ -195,9 +195,7 @@ const InfoScreen = ({ navigation }) => {
                 return (
                   <View style={{ marginHorizontal: 5 }}>
                     <Text
-                      
-                      style={{ 
-                        
+                      style={{
                         textAlign: "center",
                         fontSize: 22,
                         fontWeight: "bold"
@@ -207,33 +205,40 @@ const InfoScreen = ({ navigation }) => {
                     </Text>
                     <View style={{ marginVertical: 10 }}></View>
 
-                    <Text style={{color:"black", textAlign:"auto"}}>{thePlace.bilgi}</Text>
+                    <Text style={{ color: "black", textAlign: "auto" }}>
+                      {thePlace.bilgi}
+                    </Text>
                     <View style={{ marginVertical: 10 }}></View>
-                    
+
                     <TouchableOpacity
-                      onPress={(e)=>{
-                        console.log("e",e)
-                        Linking.openURL(`tel:${item.telefon}`)
+                      onPress={e => {
+                        console.log("e", e);
+                        Linking.openURL(`tel:${item.telefon}`);
                       }}
                     >
-                      {thePlace.telefon ? 
-                        <View style={{flexDirection:"row"}}>
-                          <MaterialIcons style={{marginLeft:0,paddingTop:3}} color="green" size={16} name="phone"/>
-                          <Text style={{color:"black",}} > {thePlace.telefon}</Text>
+                      {thePlace.telefon ? (
+                        <View style={{ flexDirection: "row" }}>
+                          <MaterialIcons
+                            style={{ marginLeft: 0, paddingTop: 3 }}
+                            color="green"
+                            size={16}
+                            name="phone"
+                          />
+                          <Text style={{ color: "black" }}>
+                            {" "}
+                            {thePlace.telefon}
+                          </Text>
                         </View>
-                        :
-                        null  
-                    }
-                      
+                      ) : null}
                     </TouchableOpacity>
                   </View>
                 );
               }}
             />
           </Card>
-          <View style={{ marginTop: 20, zIndex:1, marginHorizontal: 0 }}>
+          <View style={{ marginTop: 16, zIndex: 1, marginHorizontal: 0 }}>
             <Button
-              buttonStyle={{backgroundColor: 'purple', borderRadius:10}}
+              buttonStyle={{ backgroundColor: "purple", borderRadius: 10 }}
               title={`GO TO  ${
                 thePlace.isim == null
                   ? thePlace.isim
@@ -253,17 +258,9 @@ const InfoScreen = ({ navigation }) => {
                 Linking.openURL(url);
               }}
             />
-          {/* <View style={{ marginBottom: 20 }}></View> */}
-        </View>
+          </View>
         </Card>
-        
       </View>
-      <NavigationEvents
-        onDidFocus={() => {
-          setLanguage(state.language);
-          //navigation.navigate("Category", { lang: state.language });
-        }}
-      />
     </SafeAreaView>
   );
 };
@@ -286,7 +283,6 @@ InfoScreen.navigationOptions = ({ navigation }) => {
             borderRadius: 4
           }}
         >
-          {/* <Text>{navigation.getParam("lang")}</Text> */}
           <MaterialIcons name="settings" style={{ color: "grey" }} size={30} />
         </View>
       </TouchableOpacity>
@@ -295,54 +291,3 @@ InfoScreen.navigationOptions = ({ navigation }) => {
 };
 
 export default InfoScreen;
-
-{
-  /* <FlatList
-            data={[thePlace.resim1, thePlace.resim2, thePlace.resim3]}
-            keyExtractor={(item, index) => {
-              return index.toString();
-            }}
-            horizontal={true}
-            // style={{borderColor:"red", borderWidth:1}}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => {
-              console.log("item ", item);
-              console.log("index ", index);
-              return (
-                <View>
-                  <Image
-                    style={{
-                      borderWidth: 2,
-                      borderColor: "grey",
-                      width: Math.round((dimensions.width * 12) / 16),
-
-                      height: Math.round((dimensions.width * 9) / 16),
-                      marginHorizontal: 5
-                    }}
-                    resizeMode="contain"
-                    source={{ uri: `http://192.168.1.10:3001${item}` }}
-                  />
-                </View>
-              );
-            }}
-          /> */
-}
-
-{
-  /* <SlideShow
-            arrowSize={16}
-            indicatorSelectedColor="#ffff00"
-            height={250}
-            indicatorSize={14}
-            position={position}
-            scrollEnabled={false}
-            onPositionChanged={position => setPosition( position )}
-            dataSource={[{
-              url:`http://192.168.1.10:3001${thePlace.resim1}`
-            },{
-              url:`http://192.168.1.10:3001${thePlace.resim2}`
-            },{
-              url:`http://192.168.1.10:3001${thePlace.resim3}`
-            }]}
-          /> */
-}

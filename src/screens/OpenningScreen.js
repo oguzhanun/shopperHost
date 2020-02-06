@@ -17,22 +17,31 @@ import LanguageContext from "../contexts/LanguageContext";
 import * as SQLite from "expo-sqlite";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import publicIP from 'react-native-public-ip';
+import publicIP from "react-native-public-ip";
 
 const OpenningScreen = ({ navigation }) => {
   const [counter, setCounter] = useState(0);
-  const { state, changeLanguage } = useContext(LanguageContext);
-  const buttonWidth = Dimensions.get("window").width - 10;
+  const { changeLanguage } = useContext(LanguageContext);
+  const widthOfScreen = Dimensions.get("window").width;
+  const heightOfScreen = Dimensions.get("window").height;
+  console.log(widthOfScreen, heightOfScreen);
+  const buttonWidth = widthOfScreen - widthOfScreen * 0.0316;
+  const buttonHeight = heightOfScreen * 0.08;
+  const [connection, setConnection] = useState(false);
 
   useEffect(() => {
-    
-    publicIP().then((ip)=>{
-      console.log("IP:",ip)
-    })
+    publicIP().then(ip => {
+      console.log("IP:", ip);
+    });
 
     if (counter <= 1) {
       NetInfo.fetch().then(async state => {
-        console.log("STATE ----->:",state)
+        if (state.isConnected) {
+          //If the device has internet connection...
+          console.log("Internet Connection Is Established...");
+          setConnection(state.isConnected);
+        }
+
         const db = await SQLite.openDatabase("shopperHostDB");
 
         let deviceLanguage =
@@ -70,8 +79,6 @@ const OpenningScreen = ({ navigation }) => {
 
             await db.transaction(tx => {
               tx.executeSql(`select * from setting`, [], async (tx, set) => {
-                //console.log("set :", set)
-
                 if (set.rows._array[0].language) {
                   let dbLanguage = set.rows._array[0].language;
                   console.log("dbLanguage ----> : ", dbLanguage);
@@ -85,55 +92,37 @@ const OpenningScreen = ({ navigation }) => {
                     deviceLanguage = "tr_TR";
                     changeLanguage("TR");
                   }
-                  const lange = deviceLanguage.split("_")
+                  const lange = deviceLanguage.split("_");
                   await db.transaction(tx => {
                     tx.executeSql(`insert into setting (language) values (?)`, [
                       lange[1]
                     ]);
                   });
                 }
-                //deviceLanguage.split("_")[1]
               });
             });
           } catch (e) {
             console.log("error : ", e);
           }
         }
-
-        if (state.isConnected) {
-          //If the device has internet connection...
-        } else {
-          return (
-            <View>
-              <Text>Please Check Your Internet Connection!</Text>
-              <ActivityIndicator size="large" color="#00ff00" />
-            </View>
-          );
-        }
       });
 
-      setTimeout(() => {
-        navigation.navigate("Cities", { lang: state.language });
-      }, 2000);
+      if (connection) {
+        setTimeout(() => {
+          navigation.navigate("Cities");
+        }, 2000);
+      }
     }
 
     if (counter > 1) {
       if (Platform.OS == "ios") {
         setCounter(2);
-
-        //Linking.openURL("exit://")
-        // NativeModules.exit(0)
       } else {
         setCounter(1);
         BackHandler.exitApp();
       }
     }
   }, [counter]);
-
-  // const timeoutMessage = () => {
-  //   setTimeout(() => {}, 2500);
-  //   return message;
-  // };
 
   return (
     <SafeAreaView style={styles.container} forceInset={{ top: "never" }}>
@@ -143,26 +132,52 @@ const OpenningScreen = ({ navigation }) => {
           setCounter(counter + 1);
         }}
       />
-
-      <View>
-        <Image source={require("../../assets/OpeningScreen.png")} />
+      {connection ? null : (
+        <View
+          style={{
+            position: "absolute",
+            zIndex: 1,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+        >
+          <ActivityIndicator size="large" color="#00ff00" />
+          <Text>Please Check Your Internet Connection!</Text>
+        </View>
+      )}
+      <View style={{ flex: 1, borderWidth: 0, borderColor: "green" }}>
+        <Image
+          style={{
+            resizeMode: "cover",
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5
+          }}
+          source={require("../../assets/OpeningScreen.png")}
+        />
       </View>
       <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
         <View
           style={{
+            zIndex: 1,
+            height: buttonHeight,
+            marginBottom: 0,
             backgroundColor: "#ccc",
-            flex: 1,
-            borderRadius: 5,
-            paddingHorizontal: 40,
+            borderColor: "red",
+            borderWidth: 0,
+            borderRadius: 10,
             flexDirection: "row",
             width: buttonWidth,
             justifyContent: "center"
           }}
         >
-          <AntDesign name="login" size={50} color="white" style={{ top: 3 }} />
+          <AntDesign
+            name="login"
+            size={50}
+            color="white"
+            style={{ top: buttonHeight * 0.115 }}
+          />
         </View>
       </TouchableOpacity>
-      {/* <Text> {timeoutMessage()}</Text> */}
     </SafeAreaView>
   );
 };
@@ -182,8 +197,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     borderColor: "red",
-    borderWidth: 0,
-    marginBottom: 200
+    borderWidth: 0
   }
 });
 
