@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button,Image } from "react-native";
+import { View, Text, Button,Image,PanResponder } from "react-native";
 import axiosInstance from "../api/axiosInstance";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
@@ -13,6 +13,14 @@ const ShopsScreen = ({ navigation }) => {
   const [sehir, setSehir] = useState([]);
   const [category, setCategory] = useState([]);
   const { state } = useContext(LanguageContext);
+
+  const responder = PanResponder.create({
+    onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    onPanResponderMove: (evt, gestureState) => {
+      return true
+    },
+    onPanResponderTerminationRequest: (evt, gestureState) => true,
+  })
 
   useEffect(() => {
     //navigation.navigate("Shops", { lang: state.language });
@@ -48,7 +56,7 @@ const ShopsScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={{marginTop:10}}>
+    <View style={{marginTop:10}} {...responder.panHandlers}>
       {/* <NavigationEvents
         onDidFocus={() => {
           navigation.navigate("Shops", { lang: state.language });
@@ -64,7 +72,7 @@ const ShopsScreen = ({ navigation }) => {
           return (
             <View style={{ marginBottom: 10, flex:1}}>
               <TouchableOpacity
-                activeOpacity={0.9}
+                activeOpacity={0.5}
                 onPress={() => {
                   navigation.navigate("Info", {
                     data: {
@@ -86,7 +94,7 @@ const ShopsScreen = ({ navigation }) => {
                         marginHorizontal: 10,
                         marginVertical:10
                       }} 
-                      source={{uri:`http://192.168.1.8:3001${item.resim3}`}}/>
+                      source={{uri:`http://192.168.1.8:3001${item.resim1}`}}/>
                   <View style={{
                     alignItems:"flex-start",
                     marginVertical:10,
@@ -99,7 +107,7 @@ const ShopsScreen = ({ navigation }) => {
                     <TouchableOpacity
                       onPress={(e)=>{
                         Linking.openURL(`tel:${item.telefon}`)
-                        e.stopPropagation()
+                        //e.stopPropagation()
                       }}
                     >
                       <View>{

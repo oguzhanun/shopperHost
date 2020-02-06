@@ -207,10 +207,12 @@ const InfoScreen = ({ navigation }) => {
                     </Text>
                     <View style={{ marginVertical: 10 }}></View>
 
-                    <Text style={{color:"black", textAlign:"justify"}}>{thePlace.bilgi}</Text>
+                    <Text style={{color:"black", textAlign:"auto"}}>{thePlace.bilgi}</Text>
                     <View style={{ marginVertical: 10 }}></View>
+                    
                     <TouchableOpacity
                       onPress={(e)=>{
+                        console.log("e",e)
                         Linking.openURL(`tel:${item.telefon}`)
                       }}
                     >

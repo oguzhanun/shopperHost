@@ -17,17 +17,22 @@ import LanguageContext from "../contexts/LanguageContext";
 import * as SQLite from "expo-sqlite";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import publicIP from 'react-native-public-ip';
 
 const OpenningScreen = ({ navigation }) => {
   const [counter, setCounter] = useState(0);
   const { state, changeLanguage } = useContext(LanguageContext);
-  // const [lang, setLang] = useState();
-  // const [message, setMessage] = useState("WELCOME TO SHOPPERHOST :-|)");
   const buttonWidth = Dimensions.get("window").width - 10;
 
   useEffect(() => {
+    
+    publicIP().then((ip)=>{
+      console.log("IP:",ip)
+    })
+
     if (counter <= 1) {
       NetInfo.fetch().then(async state => {
+        console.log("STATE ----->:",state)
         const db = await SQLite.openDatabase("shopperHostDB");
 
         let deviceLanguage =

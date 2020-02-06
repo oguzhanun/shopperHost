@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Button, Image, Dimensions, ListView } from "react-native";
+import { View, Text, Button, Image, Dimensions, ListView,PanResponder } from "react-native";
 import {
   FlatList,
   TouchableOpacity,
@@ -13,7 +13,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { ListItem } from "react-native-elements";
 import { ListViewComponent } from "react-native";
 
-const CategoryScreen = ({ navigation }) => {
+const CategoryScreen = ( { navigation }) => {
   const [categories, setCategories] = useState([]);
   const [sehir, setSehir] = useState([]);
   const { state } = useContext(LanguageContext);
@@ -21,6 +21,15 @@ const CategoryScreen = ({ navigation }) => {
 
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
+
+  const responder = PanResponder.create({
+    onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    onPanResponderMove: (evt, gestureState) => {
+      return true
+    },
+    onPanResponderTerminationRequest: (evt, gestureState) => true,
+  })
+
 
   useEffect(() => {
     // navigation.navigate("Category", { lang: state.language });
@@ -116,7 +125,7 @@ const CategoryScreen = ({ navigation }) => {
   }, [language]);
 
   return (
-    <View>
+    <View {...responder.panHandlers}>
       <FlatList
         data={[{ category: "hi" }]}
         keyExtractor={item => {
@@ -128,6 +137,8 @@ const CategoryScreen = ({ navigation }) => {
             <View
               style={{
                 flex: 1,
+                
+                //height:heightOfScreen-60,
                 marginBottom: 10,
                 borderColor: "blue",
                 borderWidth: 0
@@ -197,8 +208,9 @@ const CategoryScreen = ({ navigation }) => {
                         >
                           <TouchableOpacity
                             style={{ borderColor: "red", borderWidth: 0 }}
-                            activeOpacity={0.9}
+                            activeOpacity={0.8}
                             onPress={() => {
+                              console.log(View.props)
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
@@ -224,9 +236,9 @@ const CategoryScreen = ({ navigation }) => {
                                   alignSelf: "center",
                                   // top: heightOfScreen * 0.22,
                                   fontWeight:"bold",
-                                  color: "white",
+                                  color: "gold",
                                   zIndex: 1,
-                                  backgroundColor: "purple",
+                                  backgroundColor: "grey",
                                   paddingHorizontal:10,
                                   paddingVertical:3,
                                   borderBottomLeftRadius: 4,
@@ -315,14 +327,15 @@ const CategoryScreen = ({ navigation }) => {
                         >
                           <TouchableOpacity
                             style={{ borderColor: "red", borderWidth: 0 }}
-                            activeOpacity={0.9}
-                            onPress={() => {
+                            activeOpacity={0.8}
+                            onPress={(Event) => {
+                              console.log("PROPS----->",Event)
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
                                   kategori: kat.kategori
                                 }
-                              });
+                              });                              
                             }}
                           >
                             <View style={{ margin: 5 }}>
@@ -345,9 +358,9 @@ const CategoryScreen = ({ navigation }) => {
                                   alignSelf: "center",
                                   // top: heightOfScreen * 0.22,
                                   fontWeight:"bold",
-                                  color: "white",
+                                  color: "gold",
                                   zIndex: 1,
-                                  backgroundColor: "purple",
+                                  backgroundColor: "grey",
                                   borderBottomLeftRadius: 4,
                                   borderBottomRightRadius: 4,
                                   paddingVertical:3,
