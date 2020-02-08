@@ -21,7 +21,7 @@ const navigator = createStackNavigator(
   {
     initialRouteName: "Openning",
     defaultNavigationOptions: {
-      title: "Shopper Host"
+      title: "Laklak"
     }
   }
 );

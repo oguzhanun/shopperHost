@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Shopper Host",
-    "slug": "shopperhost",
+    "name": "Laklak",
+    "slug": "applaklak",
     "privacy": "public",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -25,6 +25,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android":{
+      "package":"com.keyplus.applaklak"
     },
     "description": ""
   }

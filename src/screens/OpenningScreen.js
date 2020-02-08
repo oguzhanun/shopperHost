@@ -18,6 +18,7 @@ import * as SQLite from "expo-sqlite";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import publicIP from "react-native-public-ip";
+import axios from "axios"
 
 const OpenningScreen = ({ navigation }) => {
   const [counter, setCounter] = useState(0);
@@ -28,6 +29,7 @@ const OpenningScreen = ({ navigation }) => {
   const buttonWidth = widthOfScreen - widthOfScreen * 0.0316;
   const buttonHeight = heightOfScreen * 0.08;
   const [connection, setConnection] = useState(false);
+  
 
   useEffect(() => {
     publicIP().then(ip => {

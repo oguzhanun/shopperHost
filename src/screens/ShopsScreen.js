@@ -97,7 +97,7 @@ const ShopsScreen = ({ navigation }) => {
                         marginHorizontal: 10,
                         marginVertical:10
                       }} 
-                      source={{uri:`http://192.168.1.8:3001${item.resim1}`}}/>
+                      source={{uri:`http://37.247.107.18:1818${item.resim1}`}}/>
                   <View style={{
                     alignItems:"flex-start",
                     marginVertical:10,

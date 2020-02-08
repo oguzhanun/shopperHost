@@ -51,7 +51,7 @@ const CitiesScreen = ({ navigation }) => {
           }}
         >
           <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{color:"white", fontWeight:"bold"}}>Please Check Your Internet Connection!</Text>
+          <Text style={{color:"black", fontWeight:"bold"}}>Please Check Your Internet Connection!</Text>
         </View>
       )}
       <FlatList

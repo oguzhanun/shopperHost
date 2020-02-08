@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, Dimensions, PanResponder, StyleSheet,ActivityIndicator } from "react-native";
+import { View, Text, Image, Dimensions, PanResponder, ActivityIndicator,Platform } from "react-native";
 import {
   FlatList,
   TouchableOpacity
@@ -22,11 +22,11 @@ const CategoryScreen = ( { navigation }) => {
   const [connection, setConnection] = useState(false);
 
   const responder = PanResponder.create({
-    onMoveShouldSetPanResponder: (evt, gestureState) => true,
+    onMoveShouldSetPanResponder: (evt, gestureState) => Platform.OS === "ios" ? false : true,
     onPanResponderMove: (evt, gestureState) => {
-      return true
+      return Platform.OS === "ios" ? false : true
     },
-    onPanResponderTerminationRequest: (evt, gestureState) => true,
+    onPanResponderTerminationRequest: (evt, gestureState) => Platform.OS === "ios" ? false : true,
   })
 
   useEffect(() => {
@@ -375,14 +375,5 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
     )
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    borderColor: "red",
-    borderWidth: 0
-  }
-});
 
 export default CategoryScreen;
