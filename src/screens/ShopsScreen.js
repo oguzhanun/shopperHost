@@ -154,7 +154,6 @@ ShopsScreen.navigationOptions = ({ navigation }) => {
             borderRadius: 4
           }}
         >
-          {/* <Text>{navigation.getParam("lang")}</Text> */}
           <MaterialIcons name="settings" style={{color:"grey"}} size={30}/>
         </View>
       </TouchableOpacity>

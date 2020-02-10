@@ -8,7 +8,7 @@ import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { MaterialIcons } from "@expo/vector-icons";
-import { NavigationEvents } from "react-navigation";
+import { NavigationEvents, Feather } from "react-navigation";
 import { Linking } from "expo";
 
 const InfoScreen = ({ navigation }) => {

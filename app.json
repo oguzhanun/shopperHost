@@ -26,8 +26,8 @@
     "ios": {
       "supportsTablet": true
     },
-    "android":{
-      "package":"com.keyplus.applaklak"
+    "android": {
+      "package": "com.keyplus.applaklak"
     },
     "description": ""
   }
