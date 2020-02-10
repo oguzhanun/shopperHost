@@ -26,20 +26,31 @@ const SettingsScreen = () => {
           onValueChange={async (itemValue, itemIndex) => {
             changeLanguage(itemValue);
             await AsyncStorage.setItem("deviceLang",itemValue)
-            const db = await SQLite.openDatabase("shopperHostDB");
+
+            const db = await SQLite.openDatabase("applaklak");
+
+            await db.transaction(
+              tx => {
+                tx.executeSql(
+                  "create table if not exists ayar (id integer primary key not null, language TEXT unique);"
+                );
+              },
+              (err, succ) => {
+                if (err) {
+                  console.log(err);
+                }
+              }
+            );
 
             await db.transaction(tx => {
-              tx.executeSql(`update setting set language = ? where id = 1;`, [
-                `${itemValue}`,
-              ]);
-              console.log(itemValue)
+              tx.executeSql(`update ayar set language=? where id=1;`, [itemValue]);
+              console.log("ITEM VALUE:",itemValue)
             });
 
-            await db.transaction(tx => tx.executeSql(`select * from setting`, [], async (tx, set) => {
+            await db.transaction(tx => tx.executeSql(`select * from ayar;`, [], async (tx, set) => {
                 console.log("set-->:",set)
               })
-            )
-            
+            ) 
           }}
         >
           <Picker.Item label="Türkçe" value="TR" />

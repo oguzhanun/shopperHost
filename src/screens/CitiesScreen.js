@@ -5,15 +5,16 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from "react-native";
-//import AsyncStorage from '@react-native-community/async-storage'
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons,MaterialCommunityIcons } from "@expo/vector-icons";
 import SafeAreaView from "react-native-safe-area-view";
+import { Linking } from "expo";
 
 const CitiesScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
@@ -138,7 +139,13 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("Settings");
+          //navigation.navigate("Settings"); send?text=hello&
+          Linking.canOpenURL('whatsapp://send?phone=+905555550555').then((supported)=>{
+            if(supported){
+              Linking.openURL('whatsapp://send?phone=+905555550555')
+            } else Alert.alert("Warning", "You should install WhatsApp to use this feature.")
+          })
+
         }}
       >
         <View
@@ -151,7 +158,9 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
           }}
         >
           {/* <Text>{navigation.getParam("lang")}</Text> */}
-          <MaterialIcons name="settings" style={{ color: "grey" }} size={30} />
+          {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
+          <MaterialCommunityIcons name="whatsapp" color="green" size={32}/>
+          
         </View>
       </TouchableOpacity>
     )

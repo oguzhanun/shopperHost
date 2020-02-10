@@ -44,7 +44,7 @@ const OpenningScreen = ({ navigation }) => {
           setConnection(state.isConnected);
         }
 
-        const db = await SQLite.openDatabase("shopperHostDB");
+        const db = await SQLite.openDatabase("applaklak");
 
         let deviceLanguage =
           Platform.OS === "ios"
@@ -69,7 +69,7 @@ const OpenningScreen = ({ navigation }) => {
             await db.transaction(
               tx => {
                 tx.executeSql(
-                  "create table if not exists setting (id integer primary key not null, language text unique);"
+                  "create table if not exists ayar (id integer primary key not null, language TEXT unique);"
                 );
               },
               (err, succ) => {
@@ -77,10 +77,15 @@ const OpenningScreen = ({ navigation }) => {
                   console.log(err);
                 }
               }
-            );
+            )
+
+            // await db.transaction(tx=>{
+            //   tx.executeSql(`delete from ayar where id= ?;`, [2])
+            // })
 
             await db.transaction(tx => {
-              tx.executeSql(`select * from setting`, [], async (tx, set) => {
+              tx.executeSql(`select * from ayar;`, [], async (tx, set) => {
+
                 if (set.rows._array[0].language) {
                   let dbLanguage = set.rows._array[0].language;
                   console.log("dbLanguage ----> : ", dbLanguage);
@@ -94,13 +99,15 @@ const OpenningScreen = ({ navigation }) => {
                     deviceLanguage = "tr_TR";
                     changeLanguage("TR");
                   }
-                  const lange = deviceLanguage.split("_");
+                  
+                  let lange = deviceLanguage.split("_");
+
                   await db.transaction(tx => {
-                    tx.executeSql(`insert into setting (language) values (?)`, [
-                      lange[1]
-                    ]);
+                    tx.executeSql(`insert into ayar (language) values (?);`, [
+                      lange[1]]);
                   });
                 }
+                console.log("SET : ", set)
               });
             });
           } catch (e) {

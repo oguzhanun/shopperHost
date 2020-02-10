@@ -7,7 +7,7 @@ import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigationEvents, Feather } from "react-navigation";
 import { Linking } from "expo";
 
@@ -155,7 +155,7 @@ const InfoScreen = ({ navigation }) => {
                               marginHorizontal: 0
                             }}
                             source={{
-                              uri: `http://37.247.107.18:1818${item.resim}`
+                              uri: `http://192.168.1.8:3001${item.resim}`
                             }}
                           />
                         </View>
@@ -245,7 +245,7 @@ const InfoScreen = ({ navigation }) => {
                                         size={16}
                                         name="phone"
                                       />
-                                      <Text style={{ color: "black" }}>
+                                      <Text style={{ color: "black", marginLeft:5 }}>
                                          {thePlace.telefon}
                                       </Text>
                                     </View>
@@ -284,8 +284,8 @@ const InfoScreen = ({ navigation }) => {
                         const latLng = `${thePlace.konum}`;
                         const label = `${thePlace.isim}`;
                         const url = Platform.select({
-                          ios: `${scheme}${label}@${latLng}`,
-                          android: `${scheme}${latLng}(${label})`
+                          ios:`${scheme}${label}@${latLng}`,
+                          android:`${scheme}${latLng}(${label})`
                         });
                         Linking.openURL(url);
                       }}
@@ -304,23 +304,59 @@ InfoScreen.navigationOptions = ({ navigation }) => {
   return {
     // headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
     headerRight: () => (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Settings");
-        }}
-      >
-        <View
-          style={{
-            marginRight: 10,
-            borderColor: "grey",
-            borderWidth: 0,
-            padding: 0,
-            borderRadius: 4
+      <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Settings");
           }}
         >
-          <MaterialIcons name="settings" style={{ color: "grey" }} size={30} />
-        </View>
-      </TouchableOpacity>
+          <View
+            style={{
+              marginRight: 10,
+              borderColor: "grey",
+              borderWidth: 0,
+              padding: 0,
+              borderRadius: 4
+            }}
+          >
+            <MaterialIcons
+              name="settings"
+              style={{ color: "grey" }}
+              size={30}
+            />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            //navigation.navigate("Settings"); send?text=hello&
+            Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+              supported => {
+                if (supported) {
+                  Linking.openURL("whatsapp://send?phone=+905555550555");
+                } else
+                  Alert.alert(
+                    "Warning",
+                    "You should install WhatsApp to use this feature."
+                  );
+              }
+            );
+          }}
+        >
+          <View
+            style={{
+              marginRight: 10,
+              borderColor: "grey",
+              borderWidth: 0,
+              padding: 0,
+              borderRadius: 4
+            }}
+          >
+            {/* <Text>{navigation.getParam("lang")}</Text> */}
+            {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
+            <MaterialCommunityIcons name="whatsapp" color="green" size={32} />
+          </View>
+        </TouchableOpacity>
+      </View>
     )
   };
 };
