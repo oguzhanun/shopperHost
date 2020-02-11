@@ -305,7 +305,7 @@ InfoScreen.navigationOptions = ({ navigation }) => {
     // headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
     headerRight: () => (
       <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate("Settings");
           }}
@@ -321,11 +321,11 @@ InfoScreen.navigationOptions = ({ navigation }) => {
           >
             <MaterialIcons
               name="settings"
-              style={{ color: "grey" }}
+              style={{ color: "green" }}
               size={30}
             />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
@@ -353,7 +353,7 @@ InfoScreen.navigationOptions = ({ navigation }) => {
           >
             {/* <Text>{navigation.getParam("lang")}</Text> */}
             {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
-            <MaterialCommunityIcons name="whatsapp" color="green" size={32} />
+            <MaterialCommunityIcons name="whatsapp" color="green" size={38} />
           </View>
         </TouchableOpacity>
       </View>

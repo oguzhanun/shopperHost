@@ -26,8 +26,8 @@ const OpenningScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
   console.log(widthOfScreen, heightOfScreen);
-  const buttonWidth = widthOfScreen - widthOfScreen * 0.0316;
-  const buttonHeight = heightOfScreen * 0.08;
+  const buttonWidth = widthOfScreen //- widthOfScreen * 0.028;
+  const buttonHeight = heightOfScreen * 0.05;
   const [connection, setConnection] = useState(false);
   
 
@@ -116,11 +116,11 @@ const OpenningScreen = ({ navigation }) => {
         }
       });
 
-      if (connection) {
-        setTimeout(() => {
-          navigation.navigate("Cities");
-        }, 2000);
-      }
+      // if (connection) {
+      //   setTimeout(() => {
+      //     navigation.navigate("Cities");
+      //   }, 2000);
+      // }
     }
 
     if (counter > 1) {
@@ -170,10 +170,10 @@ const OpenningScreen = ({ navigation }) => {
             zIndex: 1,
             height: buttonHeight,
             marginBottom: 0,
-            backgroundColor: "#ccc",
+            backgroundColor: "#eee",
             borderColor: "red",
             borderWidth: 0,
-            borderRadius: 10,
+            borderRadius: 0,
             flexDirection: "row",
             width: buttonWidth,
             justifyContent: "center"
@@ -181,9 +181,9 @@ const OpenningScreen = ({ navigation }) => {
         >
           <AntDesign
             name="login"
-            size={50}
-            color="white"
-            style={{ top: buttonHeight * 0.115 }}
+            size={38}
+            color="#E83F3C"
+            style={{ top: buttonHeight * 0.02 }}
           />
         </View>
       </TouchableOpacity>
