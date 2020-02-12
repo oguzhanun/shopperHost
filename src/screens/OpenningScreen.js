@@ -15,10 +15,11 @@ import SafeAreaView from "react-native-safe-area-view";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import * as SQLite from "expo-sqlite";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import publicIP from "react-native-public-ip";
 import axios from "axios"
+import { Linking } from "expo";
 
 const OpenningScreen = ({ navigation }) => {
   const [counter, setCounter] = useState(0);
@@ -28,6 +29,7 @@ const OpenningScreen = ({ navigation }) => {
   console.log(widthOfScreen, heightOfScreen);
   const buttonWidth = widthOfScreen //- widthOfScreen * 0.028;
   const buttonHeight = heightOfScreen * 0.05;
+  console.log("buttonHeight : ", buttonHeight)
   const [connection, setConnection] = useState(false);
   
 
@@ -116,11 +118,11 @@ const OpenningScreen = ({ navigation }) => {
         }
       });
 
-      // if (connection) {
-      //   setTimeout(() => {
-      //     navigation.navigate("Cities");
-      //   }, 2000);
-      // }
+      if (connection) {
+        setTimeout(() => {
+          navigation.navigate("Cities");
+        }, 2000);
+      }
     }
 
     if (counter > 1) {
@@ -150,16 +152,26 @@ const OpenningScreen = ({ navigation }) => {
             justifyContent: "center"
           }}
         >
-          <ActivityIndicator size="large" color="#00ff00" />
+          <ActivityIndicator size="large" color="#fff" />
           <Text>Please Check Your Internet Connection!</Text>
         </View>
       )}
-      <View style={{ flex: 1, borderWidth: 0, borderColor: "green" }}>
+      <View style={{ flex: 1, 
+        // alignItems:"flex-start", 
+        // justifyContent:"flex-start", 
+        borderWidth: 0, 
+        
+        borderColor: "green" }}>
         <Image
           style={{
+            
+            borderColor:"red",
+            borderWidth:0,
             resizeMode: "cover",
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5
+            width : widthOfScreen,
+            height:heightOfScreen - buttonHeight - 60,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0
           }}
           source={require("../../assets/OpeningScreen.png")}
         />
@@ -182,7 +194,7 @@ const OpenningScreen = ({ navigation }) => {
           <AntDesign
             name="login"
             size={38}
-            color="#E83F3C"
+            color="#43862F" //#E83F3C
             style={{ top: buttonHeight * 0.02 }}
           />
         </View>
@@ -193,13 +205,41 @@ const OpenningScreen = ({ navigation }) => {
 
 OpenningScreen.navigationOptions = ({ navigation }) => {
   return {
-    // headerRight: () => (
-    //   <View style={{ marginRight: 10 }}>
-    //     <Text>{navigation.getParam("lang")}</Text>
-    //   </View>
-    // )
-  };
-};
+    headerRight: () => (
+      <TouchableOpacity
+        onPress={() => {
+          //navigation.navigate("Settings"); send?text=hello&
+          Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+            supported => {
+              if (supported) {
+                Linking.openURL("whatsapp://send?phone=+905555550555");
+              } else
+                Alert.alert(
+                  "Warning",
+                  "You should install WhatsApp to use this feature."
+                );
+            }
+          );
+        }
+      }
+      >
+        <View
+          style={{
+            marginRight: 10,
+            borderColor: "grey",
+            borderWidth: 0,
+            padding: 0,
+            borderRadius: 4
+          }}
+        >
+          {/* <Text>{navigation.getParam("lang")}</Text> */}
+          {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
+          <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
+        </View>
+      </TouchableOpacity>
+    )
+  }
+}
 
 const styles = StyleSheet.create({
   container: {

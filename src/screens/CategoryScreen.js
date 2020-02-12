@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, Dimensions, PanResponder, ActivityIndicator,Platform } from "react-native";
 import {
-  FlatList,
-  TouchableOpacity
-} from "react-native-gesture-handler";
+  View,
+  Text,
+  Image,
+  Dimensions,
+  PanResponder,
+  ActivityIndicator,
+  Platform
+} from "react-native";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
-import { MaterialIcons,MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import SafeAreaView from "react-native-safe-area-view";
 import { Linking } from "expo";
 
-
-const CategoryScreen = ( { navigation }) => {
+const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [sehir, setSehir] = useState([]);
   const { state } = useContext(LanguageContext);
@@ -23,18 +27,18 @@ const CategoryScreen = ( { navigation }) => {
   const [connection, setConnection] = useState(false);
 
   const responder = PanResponder.create({
-    onMoveShouldSetPanResponder: (evt, gestureState) => Platform.OS === "ios" ? false : true,
+    onMoveShouldSetPanResponder: (evt, gestureState) =>
+      Platform.OS === "ios" ? false : true,
     onPanResponderMove: (evt, gestureState) => {
-      return Platform.OS === "ios" ? false : true
+      return Platform.OS === "ios" ? false : true;
     },
-    onPanResponderTerminationRequest: (evt, gestureState) => Platform.OS === "ios" ? false : true,
-  })
+    onPanResponderTerminationRequest: (evt, gestureState) =>
+      Platform.OS === "ios" ? false : true
+  });
 
   useEffect(() => {
-
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
-
         setConnection(true);
 
         const sehir = navigation.getParam("sehir");
@@ -80,7 +84,7 @@ const CategoryScreen = ( { navigation }) => {
   }, [language]);
 
   return (
-    <SafeAreaView style={{flex:1, marginTop:5}}  {...responder.panHandlers}>
+    <SafeAreaView style={{ flex: 1, marginTop: 5 }} {...responder.panHandlers}>
       <NavigationEvents
         onDidFocus={() => {
           setLanguage(state.language);
@@ -89,7 +93,7 @@ const CategoryScreen = ( { navigation }) => {
       {connection ? null : (
         <View
           style={{
-            width:widthOfScreen,
+            width: widthOfScreen,
             position: "absolute",
             zIndex: 1,
             alignItems: "center",
@@ -97,7 +101,9 @@ const CategoryScreen = ( { navigation }) => {
           }}
         >
           <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{color:"black", fontWeight:"bold"}}>Please Check Your Internet Connection!</Text>
+          <Text style={{ color: "black", fontWeight: "bold" }}>
+            Please Check Your Internet Connection!
+          </Text>
         </View>
       )}
       <FlatList
@@ -181,7 +187,7 @@ const CategoryScreen = ( { navigation }) => {
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
                             onPress={() => {
-                              console.log(View.props)
+                              console.log(View.props);
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
@@ -193,7 +199,7 @@ const CategoryScreen = ( { navigation }) => {
                             <View style={{ margin: 5 }}>
                               <Image
                                 style={{
-                                  resizeMode:"stretch",
+                                  resizeMode: "stretch",
                                   borderTopLeftRadius: 4,
                                   borderTopRightRadius: 4,
                                   width: widthOfScreen * 0.485,
@@ -203,22 +209,33 @@ const CategoryScreen = ( { navigation }) => {
                               />
                               <Text
                                 style={{
-                                  fontWeight:"bold",
-                                  color: "gold",
+                                  fontWeight: "bold",
+                                  color: "white",  //gold
                                   zIndex: 1,
-                                  backgroundColor: "#aaa",
+                                  backgroundColor: "#43862F", //#aaa
                                   paddingHorizontal: widthOfScreen * 0.0243,
                                   paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
                                   borderBottomRightRadius: 4,
-                                  width : widthOfScreen * 0.485
+                                  width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategoriAR ? kat.kategoriAR.charAt(0).toUpperCase() + kat.kategoriAR.substring(1) : null ||
-                                  kat.kategoriDE ? kat.kategoriDE.charAt(0).toUpperCase() + kat.kategoriDE.substring(1) : null ||
-                                  kat.kategoriEN ? kat.kategoriEN.charAt(0).toUpperCase() + kat.kategoriEN.substring(1) : null ||
-                                  kat.kategoriRU ? kat.kategoriRU.charAt(0).toUpperCase() + kat.kategoriRU.substring(1) : null ||
-                                  kat.kategori ? kat.kategori.charAt(0).toUpperCase() + kat.kategori.substring(1) : null}
+                                {kat.kategoriAR
+                                  ? kat.kategoriAR.charAt(0).toUpperCase() +
+                                    kat.kategoriAR.substring(1)
+                                  : null || kat.kategoriDE
+                                  ? kat.kategoriDE.charAt(0).toUpperCase() +
+                                    kat.kategoriDE.substring(1)
+                                  : null || kat.kategoriEN
+                                  ? kat.kategoriEN.charAt(0).toUpperCase() +
+                                    kat.kategoriEN.substring(1)
+                                  : null || kat.kategoriRU
+                                  ? kat.kategoriRU.charAt(0).toUpperCase() +
+                                    kat.kategoriRU.substring(1)
+                                  : null || kat.kategori
+                                  ? kat.kategori.charAt(0).toUpperCase() +
+                                    kat.kategori.substring(1)
+                                  : null}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -296,23 +313,23 @@ const CategoryScreen = ( { navigation }) => {
                           <TouchableOpacity
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
-                            onPress={(Event) => {
-                              console.log("PROPS----->",Event)
+                            onPress={Event => {
+                              console.log("PROPS----->", Event);
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
                                   kategori: kat.kategori
                                 }
-                              });                              
+                              });
                             }}
                           >
                             <View style={{ margin: 5 }}>
                               {/* <Text>{kat.kategori}</Text> */}
                               <Image
                                 style={{
-                                   resizeMode: "stretch",
+                                  resizeMode: "stretch",
                                   borderTopLeftRadius: 4,
-                                  borderTopRightRadius:4,
+                                  borderTopRightRadius: 4,
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight
                                 }}
@@ -320,22 +337,33 @@ const CategoryScreen = ( { navigation }) => {
                               />
                               <Text
                                 style={{
-                                  fontWeight:"bold",
-                                  color: "gold",
+                                  fontWeight: "bold",
+                                  color: "white", //gold
                                   zIndex: 1,
-                                  backgroundColor: "#aaa",
+                                  backgroundColor: "#43862F",  //#aaa
                                   paddingHorizontal: widthOfScreen * 0.0243,
                                   paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
                                   borderBottomRightRadius: 4,
-                                  width : widthOfScreen * 0.485
+                                  width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategoriAR ? kat.kategoriAR.charAt(0).toUpperCase() + kat.kategoriAR.substring(1) : null ||
-                                  kat.kategoriDE ? kat.kategoriDE.charAt(0).toUpperCase() + kat.kategoriDE.substring(1) : null ||
-                                  kat.kategoriEN ? kat.kategoriEN.charAt(0).toUpperCase() + kat.kategoriEN.substring(1) : null ||
-                                  kat.kategoriRU ? kat.kategoriRU.charAt(0).toUpperCase() + kat.kategoriRU.substring(1) : null ||
-                                  kat.kategori ? kat.kategori.charAt(0).toUpperCase() + kat.kategori.substring(1) : null}
+                                {kat.kategoriAR
+                                  ? kat.kategoriAR.charAt(0).toUpperCase() +
+                                    kat.kategoriAR.substring(1)
+                                  : null || kat.kategoriDE
+                                  ? kat.kategoriDE.charAt(0).toUpperCase() +
+                                    kat.kategoriDE.substring(1)
+                                  : null || kat.kategoriEN
+                                  ? kat.kategoriEN.charAt(0).toUpperCase() +
+                                    kat.kategoriEN.substring(1)
+                                  : null || kat.kategoriRU
+                                  ? kat.kategoriRU.charAt(0).toUpperCase() +
+                                    kat.kategoriRU.substring(1)
+                                  : null || kat.kategori
+                                  ? kat.kategori.charAt(0).toUpperCase() +
+                                    kat.kategori.substring(1)
+                                  : null}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -348,6 +376,30 @@ const CategoryScreen = ( { navigation }) => {
           );
         }}
       />
+      <View style={{position: "absolute",
+              zIndex: 1,
+              bottom: 10,
+              right: 10}}>
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate("Map")
+        }}>
+          <MaterialCommunityIcons
+            name="map-marker-multiple"
+            color="#4E9A32"
+            size={50}
+            style={{
+              backgroundColor: "transparent",
+              borderBottomColor:"white",
+              padding:0,
+              borderBottomWidth:2,
+              borderRadius: 10,
+              
+            }}
+          />
+        </TouchableOpacity>
+      </View>
+      
+      
     </SafeAreaView>
   );
 };
@@ -358,12 +410,19 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           //navigation.navigate("Settings"); send?text=hello&
-          Linking.canOpenURL('whatsapp://send?phone=+905555550555').then((supported)=>{
-            if(supported){
-              Linking.openURL('whatsapp://send?phone=+905555550555')
-            } else Alert.alert("Warning", "You should install WhatsApp to use this feature.")
-          })
-        }}
+          Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+            supported => {
+              if (supported) {
+                Linking.openURL("whatsapp://send?phone=+905555550555");
+              } else
+                Alert.alert(
+                  "Warning",
+                  "You should install WhatsApp to use this feature."
+                );
+            }
+          );
+        }
+      }
       >
         <View
           style={{
@@ -376,8 +435,7 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
         >
           {/* <Text>{navigation.getParam("lang")}</Text> */}
           {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
-          <MaterialCommunityIcons name="whatsapp" color="green" size={38}/>
-          
+          <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
         </View>
       </TouchableOpacity>
     )

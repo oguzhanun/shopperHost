@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Image } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import OpenningScreen from "./src/screens/OpenningScreen";
@@ -10,10 +10,10 @@ import InfoScreen from "./src/screens/InfoScreen";
 import { LanguageProvider } from "./src/contexts/LanguageContext";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import { createBottomTabNavigator } from "react-navigation-tabs";
-import { MaterialCommunityIcons,AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Linking } from "expo";
-
+import MapScreen from "./src/screens/MapScreen"
 
 const navigator = createBottomTabNavigator(
   {
@@ -23,53 +23,70 @@ const navigator = createBottomTabNavigator(
         Cities: CitiesScreen,
         Category: CategoryScreen,
         Shops: ShopsScreen,
-        Info: InfoScreen
+        Info: InfoScreen,
+        Map : MapScreen
 
         //Settings: SettingsScreen,
       },
       {
         initialRouteName: "Openning",
-        defaultNavigationOptions:{
-          title: "Laklak",
+        defaultNavigationOptions: {
+          title:
+              <Image
+                style={{
+                  position:"relative",
+                  resizeMode:"contain",
+                  borderColor: "red",
+                  borderWidth: 1,
+                  width: 50,
+                  height: 50
+                }}
+                source={require("./assets/status.png")}
+              />,
+            headerTitleStyle:{
+              //backgroundColor:"green",
+              margin:0,
+              padding:0,
+              top:-3,
+              left:-15,
+              width:80,
+              height:80  
+            }
+            
         },
+
         navigationOptions: ({ navigation }) => ({
           title: "Laklak",
-          tabBarOnPress:()=>{
-            navigation.navigate("Cities")
+          tabBarOnPress: () => {
+            navigation.navigate("Cities");
           },
           tabBarIcon: () => {
             return (
               <View
                 style={{
                   borderColor: "green",
-                  borderWidth: 0,
+                  borderWidth: 0
                   //backgroundColor: "yellow"
                 }}
               >
                 <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
-                  <AntDesign
-                    name="bars"
-                    size={30}
-                    color="red"
-                  />
+                  <AntDesign name="bars" size={30} color="red" />
                 </TouchableOpacity>
               </View>
             );
           }
-
         })
       }
     ),
     Settings: {
       screen: SettingsScreen,
       navigationOptions: ({ navigation }) => ({
-        
         tabBarIcon: () => {
           return (
             <View
               style={{
                 borderColor: "green",
-                borderWidth: 0,
+                borderWidth: 0
                 //backgroundColor: "yellow"
               }}
             >
@@ -77,7 +94,7 @@ const navigator = createBottomTabNavigator(
                 <MaterialCommunityIcons
                   name="settings"
                   size={30}
-                  color="green"
+                  color="#43862F"
                 />
               </TouchableOpacity>
             </View>
@@ -86,23 +103,23 @@ const navigator = createBottomTabNavigator(
       })
     },
     Instagram: {
-      screen : (() => {
+      screen: () => {
         return (
           <View>
             {/* <MaterialCommunityIcons name="instagram" color="red" /> */}
           </View>
         );
-      }),
+      },
       navigationOptions: ({ navigation }) => ({
-        tabBarOnPress:()=>{
-          navigation.navigate("")
+        tabBarOnPress: () => {
+          navigation.navigate("");
         },
         tabBarIcon: () => {
           return (
             <View
               style={{
                 borderColor: "green",
-                borderWidth: 0,
+                borderWidth: 0
                 //backgroundColor: "yellow"
               }}
             >
@@ -119,23 +136,23 @@ const navigator = createBottomTabNavigator(
       })
     },
     Twitter: {
-      screen : (() => {
+      screen: () => {
         return (
           <View>
             {/* <MaterialCommunityIcons name="instagram" color="red" /> */}
           </View>
         );
-      }),
+      },
       navigationOptions: ({ navigation }) => ({
-        tabBarOnPress:()=>{
-          navigation.navigate("")
+        tabBarOnPress: () => {
+          navigation.navigate("");
         },
         tabBarIcon: () => {
           return (
             <View
               style={{
                 borderColor: "green",
-                borderWidth: 0,
+                borderWidth: 0
                 //backgroundColor: "yellow"
               }}
             >
@@ -152,32 +169,28 @@ const navigator = createBottomTabNavigator(
       })
     },
     Facebook: {
-      screen : (() => {
+      screen: () => {
         return (
           <View>
             {/* <MaterialCommunityIcons name="instagram" color="red" /> */}
           </View>
         );
-      }),
+      },
       navigationOptions: ({ navigation }) => ({
-        tabBarOnPress:()=>{
-          navigation.navigate("")
+        tabBarOnPress: () => {
+          navigation.navigate("");
         },
         tabBarIcon: () => {
           return (
             <View
               style={{
                 borderColor: "green",
-                borderWidth: 0,
+                borderWidth: 0
                 //backgroundColor: "yellow"
               }}
             >
               <TouchableOpacity onPress={() => navigation.navigate("")}>
-                <AntDesign
-                  name="facebook-square"
-                  size={30}
-                  color="#3b5998"
-                />
+                <AntDesign name="facebook-square" size={30} color="#3b5998" />
               </TouchableOpacity>
             </View>
           );

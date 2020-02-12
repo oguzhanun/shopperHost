@@ -159,7 +159,7 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
         >
           {/* <Text>{navigation.getParam("lang")}</Text> */}
           {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
-          <MaterialCommunityIcons name="whatsapp" color="green" size={38}/>
+          <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38}/>
           
         </View>
       </TouchableOpacity>

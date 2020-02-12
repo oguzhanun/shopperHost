@@ -10,7 +10,7 @@ const SettingsScreen = () => {
   const width = Dimensions.get("window").width;
 
   return (
-    <SafeAreaView style={{ flex: 1, alignItems: "center" }}>
+    <SafeAreaView forceInset={{ top:"always" }} style={{alignItems:"center"}}>
       <View style={{ marginTop: 25 }}>
         <Text>SELECT YOUR LANGUAGE</Text>
         <Picker

@@ -60,7 +60,7 @@ const ShopsScreen = ({ navigation }) => {
   }, []);
 
   return (
-    <SafeAreaView style={{ marginTop: 10 }} {...responder.panHandlers}>
+    <SafeAreaView forceInset={{top:"never"}} style={{flex:1, marginTop: 10 }} {...responder.panHandlers}>
       {/* <NavigationEvents
         onDidFocus={() => {
           navigation.navigate("Shops", { lang: state.language });
@@ -212,7 +212,7 @@ const ShopsScreen = ({ navigation }) => {
                         style={{
                           backgroundColor: "#ccc",
                           borderRadius: 5,
-                          padding: 2,
+                          padding: 4,
                           justifyContent: "flex-end",
                           alignSelf: "flex-end",
                           borderColor: "red",
@@ -229,7 +229,7 @@ const ShopsScreen = ({ navigation }) => {
                             const label = `${item.isim}`;
                             const url = Platform.select({
                               ios: `${scheme}${label}@${latLng}`,
-                              android: `${scheme}${latLng}(${label})`
+                              android: `${scheme}${latLng}(${label})`    //42.56,39.44
                             });
                             Linking.openURL(url);
                           }}
@@ -249,6 +249,28 @@ const ShopsScreen = ({ navigation }) => {
           );
         }}
       />
+      <View style={{position: "absolute",
+              zIndex: 1,
+              bottom: 10,
+              right: 10}}>
+        <TouchableOpacity onPress={()=>{
+          navigation.navigate("Map")
+        }}>
+          <MaterialCommunityIcons
+            name="map-marker-multiple"
+            color="#43862F"
+            size={50}
+            style={{
+              backgroundColor: "transparent",
+              borderBottomColor:"white",
+              padding:0,
+              borderBottomWidth:2,
+              borderRadius: 10,
+              
+            }}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -305,7 +327,7 @@ ShopsScreen.navigationOptions = ({ navigation }) => {
           >
             {/* <Text>{navigation.getParam("lang")}</Text> */}
             {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
-            <MaterialCommunityIcons name="whatsapp" color="green" size={38} />
+            <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
           </View>
         </TouchableOpacity>
       </View>

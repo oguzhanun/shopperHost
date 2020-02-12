@@ -1,5 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
-import { View, Image, Dimensions, AsyncStorage,ScrollView } from "react-native";
+import {
+  View,
+  Image,
+  Dimensions,
+  AsyncStorage,
+  ScrollView
+} from "react-native";
 import { Card, Button, Text } from "react-native-elements";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import SafeAreaView from "react-native-safe-area-view";
@@ -7,8 +13,12 @@ import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
 import LanguageContext from "../contexts/LanguageContext";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { NavigationEvents, Feather } from "react-navigation";
+import {
+  MaterialIcons,
+  Feather,
+  MaterialCommunityIcons
+} from "@expo/vector-icons";
+import { NavigationEvents } from "react-navigation";
 import { Linking } from "expo";
 
 const InfoScreen = ({ navigation }) => {
@@ -93,11 +103,9 @@ const InfoScreen = ({ navigation }) => {
       />
       <FlatList
         style={{
-
           marginVertical: 0,
           borderColor: "red",
           borderWidth: 0
-          
         }}
         data={[{ category: "hi" }]}
         keyExtractor={(item, index) => {
@@ -106,164 +114,210 @@ const InfoScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
-              <View
-                style={{
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "space-between",
+                alignContent: "center",
+                borderColor: "green",
+                borderWidth: 0,
+                marginTop: 10,
+                paddingTop: 0
+              }}
+            >
+              <Card
+                containerStyle={{
+                  backgroundColor: "#efefef",
                   flex: 1,
-                  justifyContent: "space-between",
-                  alignContent: "center",
-                  borderColor: "green",
-                  borderWidth: 0,
-                  marginTop: 10,
-                  paddingTop: 0
+                  marginTop: 0,
+                  paddingTop: 0,
+                  borderRadius: 10
                 }}
               >
+                <Carousel
+                  ref={c => setTap(c)}
+                  data={[
+                    { resim: thePlace.resim1 },
+                    { resim: thePlace.resim2 },
+                    { resim: thePlace.resim3 }
+                  ]}
+                  renderItem={({ item, index }, parallaxProps) => {
+                    return (
+                      <View
+                        style={{
+                          alignItems: "center",
+                          borderColor: "red",
+                          borderWidth: 0,
+                          marginLeft: 0,
+                          marginRight: sliderWidth * 0.151,
+                          paddingVertical: 10,
+                          borderRadius: 5
+                        }}
+                      >
+                        <Image
+                          style={{
+                            resizeMode: "contain",
+                            width: sliderWidth * 0.85,
+                            height: height * 0.32,
+                            borderRadius: 5,
+                            marginHorizontal: 0
+                          }}
+                          source={{
+                            uri: `http://192.168.1.8:3001${item.resim}`
+                          }}
+                        />
+                      </View>
+                    );
+                  }}
+                  onSnapToItem={index => setIndex(index)}
+                  sliderWidth={sliderWidth}
+                  itemWidth={itemWidth}
+                  containerCustomStyle={{
+                    borderWidth: 0,
+                    borderColor: "red"
+                  }}
+                />
+                <Pagination
+                  dotsLength={3}
+                  dotColor="black"
+                  dotStyle={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: 5,
+                    marginHorizontal: 0
+                  }}
+                  inactiveDotColor="grey"
+                  containerStyle={{
+                    borderColor: "red",
+                    paddingVertical: 0,
+                    borderWidth: 0
+                  }}
+                  activeDotIndex={index}
+                  tappableDots={true}
+                  carouselRef={tap}
+                />
+
                 <Card
                   containerStyle={{
-                    backgroundColor: "#efefef",
-                    flex: 1,
-                    marginTop: 0,
-                    paddingTop: 0,
-                    borderRadius: 10
+                    marginHorizontal: 0,
+                    borderRadius: 10,
+                    position: "relative"
+                    // bottom: 0, backgroundColor:"#efefef"
                   }}
                 >
-                  <Carousel
-                    ref={c => setTap(c)}
-                    data={[
-                      { resim: thePlace.resim1 },
-                      { resim: thePlace.resim2 },
-                      { resim: thePlace.resim3 }
-                    ]}
-                    renderItem={({ item, index }, parallaxProps) => {
-                      return (
-                        <View
-                          style={{
-                            alignItems: "center",
-                            borderColor: "red",
-                            borderWidth: 0,
-                            marginLeft: 0,
-                            marginRight: sliderWidth * 0.151,
-                            paddingVertical: 10,
-                            borderRadius: 5
-                          }}
-                        >
-                          <Image
-                            style={{
-                              resizeMode: "contain",
-                              width: sliderWidth * 0.85,
-                              height: height * 0.32,
-                              borderRadius: 5,
-                              marginHorizontal: 0
-                            }}
-                            source={{
-                              uri: `http://192.168.1.8:3001${item.resim}`
-                            }}
-                          />
-                        </View>
-                      );
-                    }}
-                    onSnapToItem={index => setIndex(index)}
-                    sliderWidth={sliderWidth}
-                    itemWidth={itemWidth}
-                    containerCustomStyle={{
-                      borderWidth: 0,
-                      borderColor: "red"
-                    }}
-                  />
-                  <Pagination
-                    dotsLength={3}
-                    dotColor="black"
-                    dotStyle={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: 5,
-                      marginHorizontal: 0
-                    }}
-                    inactiveDotColor="grey"
-                    containerStyle={{
+                  <View
+                    style={{
+                      height: height * 0.38,
+                      marginVertical: 5,
                       borderColor: "red",
-                      paddingVertical: 0,
                       borderWidth: 0
                     }}
-                    activeDotIndex={index}
-                    tappableDots={true}
-                    carouselRef={tap}
-                  />
-
-                  <Card
-                    containerStyle={{
-                      marginHorizontal: 0,
-                      borderRadius: 10,
-                      position: "relative"
-                      // bottom: 0, backgroundColor:"#efefef"
-                    }}
+                    // showsVerticalScrollIndicator={false}
+                    // data={[thePlace.isim]}
+                    // keyExtractor={(item, index) => {
+                    //   return index.toString();
+                    // }}
+                    // renderItem={({ item }) => {
+                    //   return (
                   >
-                    <View
-                      style={{
-                        height: height * 0.38,
-                        marginVertical: 5,
-                        borderColor: "red",
-                        borderWidth: 0
-                      }}
-                      // showsVerticalScrollIndicator={false}
-                      // data={[thePlace.isim]}
-                      // keyExtractor={(item, index) => {
-                      //   return index.toString();
-                      // }}
-                      // renderItem={({ item }) => {
-                      //   return (
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      <View style={{ marginHorizontal: 5 }}>
+                        <Text
+                          style={{
+                            textAlign: "center",
+                            fontSize: 22,
+                            fontWeight: "bold"
+                          }}
                         >
-                          <ScrollView showsVerticalScrollIndicator={false}>
-                            <View style={{ marginHorizontal: 5 }}>
-                              <Text
-                                style={{
-                                  textAlign: "center",
-                                  fontSize: 22,
-                                  fontWeight: "bold"
-                                }}
-                              >
-                                {thePlace.isim}
-                              </Text>
-                              
-                              <View style={{ marginVertical: 10 }}></View>
+                          {thePlace.isim}
+                        </Text>
 
-                              <Text style={{ color: "black", textAlign: "auto" }}>
-                                {thePlace.bilgi}
-                              </Text>
-                              <View style={{ marginVertical: 10 }}></View>
-                              
-                              <TouchableOpacity
-                                onPress={(e) => {
-                                  Linking.openURL(`tel:${thePlace.telefon}`)
-                                }}
-                              >
-                                <View>
-                                  {thePlace.telefon ? 
-                                    <View style={{ flexDirection: "row" }}>
-                                      <MaterialIcons
-                                        style={{ marginLeft: 0, paddingTop: 3 }}
-                                        color="green"
-                                        size={16}
-                                        name="phone"
-                                      />
-                                      <Text style={{ color: "black", marginLeft:5 }}>
-                                         {thePlace.telefon}
-                                      </Text>
-                                    </View>
-                                   : 
-                                   <View>
-                                    <Text style={{marginLeft:5, color:"black", fontWeight:"bold"}}>{item.telefon}</Text>
-                                   </View>
-                                   }
-                                </View>
-                              </TouchableOpacity>
-                            </View>
-                          </ScrollView>
-                        {/* );
-                      }} */}
+                        <View style={{ marginVertical: 10 }}></View>
+
+                        <Text style={{ color: "black", textAlign: "auto" }}>
+                          {thePlace.bilgi}
+                        </Text>
+                        <View style={{ marginVertical: 10 }}></View>
+
+                        <TouchableOpacity
+                          onPress={e => {
+                            Linking.openURL(`tel:${thePlace.telefon}`);
+                          }}
+                        >
+                          <View>
+                            {thePlace.telefon ? (
+                              <View style={{ flexDirection: "row" }}>
+                                <MaterialIcons
+                                  style={{ marginLeft: 0, paddingTop: 3 }}
+                                  color="green"
+                                  size={16}
+                                  name="phone"
+                                />
+                                <Text style={{ color: "black", marginLeft: 5 }}>
+                                  {thePlace.telefon}
+                                </Text>
+                              </View>
+                            ) : (
+                              <View>
+                                <Text
+                                  style={{
+                                    marginLeft: 5,
+                                    color: "black",
+                                    fontWeight: "bold"
+                                  }}
+                                >
+                                  {item.telefon}
+                                </Text>
+                              </View>
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    </ScrollView>
+                    {/* <View
+                      style={{ marginTop: 12, zIndex: 1, marginHorizontal: 0 }}
+                    > */}
+                      <View
+                        style={{
+                          position:"absolute",
+                          bottom:-16,
+                          right:-10,
+                          backgroundColor: "#eee",
+                          borderRadius: 8,
+                          padding: 4,
+                          justifyContent: "flex-end",
+                          alignSelf: "flex-end",
+                          borderColor: "red",
+                          borderWidth: 0
+                        }}
+                      >
+                        <TouchableOpacity
+                          onPress={() => {
+                            const scheme = Platform.select({
+                              ios: "maps:0,0?q=",
+                              android: "geo:0,0?q="
+                            });
+                            const latLng = `${thePlace.konum}`;
+                            const label = `${thePlace.isim}`;
+                            const url = Platform.select({
+                              ios: `${scheme}${label}@${latLng}`,
+                              android: `${scheme}${latLng}(${label})`
+                            });
+                            Linking.openURL(url);
+                          }}
+                        >
+                          <Feather
+                            color="#43862F" //#397DC6
+                            name="navigation"
+                            size={36}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                  </Card>
-                  
-                  <View
+                  {/* </View> */}
+                </Card>
+
+                {/* <View
                     style={{ marginTop: 12, zIndex: 1, marginHorizontal: 0 }}
                   >
                     <Button
@@ -290,9 +344,9 @@ const InfoScreen = ({ navigation }) => {
                         Linking.openURL(url);
                       }}
                     />
-                  </View>
-                </Card>
-              </View>
+                  </View> */}
+              </Card>
+            </View>
           );
         }}
       />
@@ -304,7 +358,7 @@ InfoScreen.navigationOptions = ({ navigation }) => {
   return {
     // headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
     headerRight: () => (
-      <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         {/* <TouchableOpacity
           onPress={() => {
             navigation.navigate("Settings");
@@ -353,7 +407,7 @@ InfoScreen.navigationOptions = ({ navigation }) => {
           >
             {/* <Text>{navigation.getParam("lang")}</Text> */}
             {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
-            <MaterialCommunityIcons name="whatsapp" color="green" size={38} />
+            <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
           </View>
         </TouchableOpacity>
       </View>
