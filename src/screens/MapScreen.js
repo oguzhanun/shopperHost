@@ -6,9 +6,11 @@ import SafeAreaView from "react-native-safe-area-view";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Linking } from "expo";
 
-const MapScreen = () => {
+const MapScreen = ({navigation}) => {
+  const shopsPosition = navigation.getParam("shopsPosition")
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
+  //console.log(shopsPosition)
 
   return (
     <SafeAreaView forceInset={{ top: "never" }}>
@@ -21,12 +23,20 @@ const MapScreen = () => {
           longitudeDelta: 5.0421
         }}
         style={{ width, height }}
-      >
-        <Marker
-          coordinate={{ latitude: 40.197996, longitude: 29.06112 }}
-          title={"marker.title"}
+      >{
+        shopsPosition.map(shop=>{
+          console.log(shop.konum.split(",")[0])
+          
+          return(
+            <Marker
+          coordinate={{ latitude: parseFloat(shop.konum.split(",")[0]), longitude: parseFloat(shop.konum.split(",")[1]) }}
+          title={shop.isim}
           description={"marker.description"}
         />
+          )
+        })
+      }
+        
       </MapView>
     </SafeAreaView>
   );

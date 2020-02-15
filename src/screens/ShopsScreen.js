@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, PanResponder, Dimensions } from "react-native";
+import { View, Text, Image, PanResponder, Dimensions,TouchableWithoutFeedback } from "react-native";
 import axiosInstance from "../api/axiosInstance";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity, TouchableHighlight } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
@@ -9,6 +9,7 @@ import { MaterialIcons, Feather, MaterialCommunityIcons } from "@expo/vector-ico
 import { Linking } from "expo";
 import { Rating } from "react-native-elements";
 import SafeAreaView from "react-native-safe-area-view";
+import { stopAsync } from "expo/build/AR";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
@@ -17,6 +18,8 @@ const ShopsScreen = ({ navigation }) => {
   const { state } = useContext(LanguageContext);
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
+  const [propagation, setPropagation] = useState(true)
+  const [active, setActivity] = useState(true)
 
   const responder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -61,11 +64,16 @@ const ShopsScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView forceInset={{top:"never"}} style={{flex:1, marginTop: 10 }} {...responder.panHandlers}>
-      {/* <NavigationEvents
+      <NavigationEvents
         onDidFocus={() => {
-          navigation.navigate("Shops", { lang: state.language });
+          setPropagation(true)
+          setActivity(true)
+          //navigation.navigate("Shops", { lang: state.language });
         }}
-      /> */}
+        onDidBlur={()=>{
+          setActivity(false)
+        }}
+      />
       <FlatList
         data={shops}
         keyExtractor={item => {
@@ -78,6 +86,7 @@ const ShopsScreen = ({ navigation }) => {
               <TouchableOpacity
                 activeOpacity={0.5}
                 onPress={() => {
+                  if(propagation)
                   navigation.navigate("Info", {
                     data: {
                       shopId: item.id
@@ -190,12 +199,22 @@ const ShopsScreen = ({ navigation }) => {
                           borderColor: "green",
                           borderWidth: 0,
                           alignItems: "center",
-                          flexDirection: "row"
+                          flexDirection: "row",
+                          zIndex:10
                         }}
                       >
+                        
                         <Rating
-                          onStartRating={() => {
+                          cancelable
+                          onStartRating={async (e) => {
+
+                            setPropagation(false)
+
                             console.log("rating started");
+                            
+                            navigation.navigate("Rating",{data:{shopName:item.isim, shopId:item.id}})
+
+                            
                           }}
                           startingValue={item.rating}
                           fractions={20}
@@ -204,9 +223,11 @@ const ShopsScreen = ({ navigation }) => {
                             return null;
                           }}
                         />
-                        <Text style={{ marginLeft: 5, fontSize: 12 }}>
-                          ({item.rating})
-                        </Text>
+                        
+                          <Text style={{ marginLeft: 5, fontSize: 12 }}>
+                            ({item.rating})
+                          </Text>
+                        
                       </View>
                       <View
                         style={{
@@ -254,6 +275,7 @@ const ShopsScreen = ({ navigation }) => {
               bottom: 10,
               right: 10}}>
         <TouchableOpacity onPress={()=>{
+          if(active)
           navigation.navigate("Map")
         }}>
           <MaterialCommunityIcons

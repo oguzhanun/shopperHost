@@ -6,7 +6,7 @@ import {
   AsyncStorage,
   ScrollView
 } from "react-native";
-import { Card, Button, Text } from "react-native-elements";
+import { Card, Button, Text, Badge } from "react-native-elements";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import SafeAreaView from "react-native-safe-area-view";
 import NetInfo from "@react-native-community/netinfo";
@@ -205,6 +205,29 @@ const InfoScreen = ({ navigation }) => {
                     // bottom: 0, backgroundColor:"#efefef"
                   }}
                 >
+                  <Badge
+                    value={
+                      <Text
+                        style={{
+                          backgroundColor: "#F4AD33",//#E93F33
+                          opacity: 1,
+                          color: "white",
+                          borderRadius: 15,
+                          padding: 4,
+                          paddingHorizontal: 7,
+                          transform: [{ rotate: "90deg" }]
+                        }}
+                      >
+                        -%10
+                      </Text>
+                    }
+                    containerStyle={{
+                      position: "absolute",
+                      backgroundColor: "white",
+                      right: -15
+                    }}
+                    badgeStyle={{ backgroundColor: "transparent", }}
+                  />
                   <View
                     style={{
                       height: height * 0.38,
@@ -277,43 +300,43 @@ const InfoScreen = ({ navigation }) => {
                     {/* <View
                       style={{ marginTop: 12, zIndex: 1, marginHorizontal: 0 }}
                     > */}
-                      <View
-                        style={{
-                          position:"absolute",
-                          bottom:-16,
-                          right:-10,
-                          backgroundColor: "#eee",
-                          borderRadius: 8,
-                          padding: 4,
-                          justifyContent: "flex-end",
-                          alignSelf: "flex-end",
-                          borderColor: "red",
-                          borderWidth: 0
+                    <View
+                      style={{
+                        position: "absolute",
+                        bottom: -16,
+                        right: -10,
+                        backgroundColor: "#eee",
+                        borderRadius: 8,
+                        padding: 4,
+                        justifyContent: "flex-end",
+                        alignSelf: "flex-end",
+                        borderColor: "red",
+                        borderWidth: 0
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() => {
+                          const scheme = Platform.select({
+                            ios: "maps:0,0?q=",
+                            android: "geo:0,0?q="
+                          });
+                          const latLng = `${thePlace.konum}`;
+                          const label = `${thePlace.isim}`;
+                          const url = Platform.select({
+                            ios: `${scheme}${label}@${latLng}`,
+                            android: `${scheme}${latLng}(${label})`
+                          });
+                          Linking.openURL(url);
                         }}
                       >
-                        <TouchableOpacity
-                          onPress={() => {
-                            const scheme = Platform.select({
-                              ios: "maps:0,0?q=",
-                              android: "geo:0,0?q="
-                            });
-                            const latLng = `${thePlace.konum}`;
-                            const label = `${thePlace.isim}`;
-                            const url = Platform.select({
-                              ios: `${scheme}${label}@${latLng}`,
-                              android: `${scheme}${latLng}(${label})`
-                            });
-                            Linking.openURL(url);
-                          }}
-                        >
-                          <Feather
-                            color="#43862F" //#397DC6
-                            name="navigation"
-                            size={36}
-                          />
-                        </TouchableOpacity>
-                      </View>
+                        <Feather
+                          color="#43862F" //#397DC6
+                          name="navigation"
+                          size={36}
+                        />
+                      </TouchableOpacity>
                     </View>
+                  </View>
                   {/* </View> */}
                 </Card>
 

@@ -71,7 +71,7 @@ const OpenningScreen = ({ navigation }) => {
             await db.transaction(
               tx => {
                 tx.executeSql(
-                  "create table if not exists ayar (id integer primary key not null, language TEXT unique);"
+                  "create table if not exists ayar1 (id integer primary key not null, language TEXT unique);"
                 );
               },
               (err, succ) => {
@@ -86,7 +86,7 @@ const OpenningScreen = ({ navigation }) => {
             // })
 
             await db.transaction(tx => {
-              tx.executeSql(`select * from ayar;`, [], async (tx, set) => {
+              tx.executeSql(`select * from ayar1;`, [], async (tx, set) => {
 
                 if (set.rows._array[0].language) {
                   let dbLanguage = set.rows._array[0].language;
@@ -105,7 +105,7 @@ const OpenningScreen = ({ navigation }) => {
                   let lange = deviceLanguage.split("_");
 
                   await db.transaction(tx => {
-                    tx.executeSql(`insert into ayar (language) values (?);`, [
+                    tx.executeSql(`insert into ayar1 (language) values (?);`, [
                       lange[1]]);
                   });
                 }
@@ -121,7 +121,7 @@ const OpenningScreen = ({ navigation }) => {
       if (connection) {
         setTimeout(() => {
           navigation.navigate("Cities");
-        }, 2000);
+        }, 3000);
       }
     }
 
@@ -164,19 +164,18 @@ const OpenningScreen = ({ navigation }) => {
         borderColor: "green" }}>
         <Image
           style={{
-            
             borderColor:"red",
             borderWidth:0,
             resizeMode: "cover",
             width : widthOfScreen,
-            height:heightOfScreen - buttonHeight - 60,
+            height:heightOfScreen - heightOfScreen * 0.085, //- buttonHeight - 60,
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0
           }}
           source={require("../../assets/OpeningScreen.png")}
         />
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
+      {/* <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
         <View
           style={{
             zIndex: 1,
@@ -198,7 +197,7 @@ const OpenningScreen = ({ navigation }) => {
             style={{ top: buttonHeight * 0.02 }}
           />
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
   );
 };

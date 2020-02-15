@@ -32,7 +32,7 @@ const SettingsScreen = () => {
             await db.transaction(
               tx => {
                 tx.executeSql(
-                  "create table if not exists ayar (id integer primary key not null, language TEXT unique);"
+                  "create table if not exists ayar1 (id integer primary key not null, language TEXT unique);"
                 );
               },
               (err, succ) => {
@@ -43,11 +43,11 @@ const SettingsScreen = () => {
             );
 
             await db.transaction(tx => {
-              tx.executeSql(`update ayar set language=? where id=1;`, [itemValue]);
+              tx.executeSql(`update ayar1 set language=? where id=1;`, [itemValue]);
               console.log("ITEM VALUE:",itemValue)
             });
 
-            await db.transaction(tx => tx.executeSql(`select * from ayar;`, [], async (tx, set) => {
+            await db.transaction(tx => tx.executeSql(`select * from ayar1;`, [], async (tx, set) => {
                 console.log("set-->:",set)
               })
             ) 
@@ -55,8 +55,8 @@ const SettingsScreen = () => {
         >
           <Picker.Item label="Türkçe" value="TR" />
           <Picker.Item label="English" value="EN" />
-          <Picker.Item label="Deutsch" value="DE" />
-          <Picker.Item label="русский" value="RU" />
+          {/* <Picker.Item label="Deutsch" value="DE" />
+          <Picker.Item label="русский" value="RU" /> */}
           <Picker.Item label="العربية" value="AR" />
         </Picker>
       </View>

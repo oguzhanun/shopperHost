@@ -14,6 +14,7 @@ import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Linking } from "expo";
 import MapScreen from "./src/screens/MapScreen"
+import RatingScreen from "./src/screens/RatingScreen";
 
 const navigator = createBottomTabNavigator(
   {
@@ -24,7 +25,8 @@ const navigator = createBottomTabNavigator(
         Category: CategoryScreen,
         Shops: ShopsScreen,
         Info: InfoScreen,
-        Map : MapScreen
+        Map : MapScreen,
+        Rating : RatingScreen
 
         //Settings: SettingsScreen,
       },
@@ -123,7 +125,16 @@ const navigator = createBottomTabNavigator(
                 //backgroundColor: "yellow"
               }}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("")}>
+              <TouchableOpacity onPress={() => {
+                //navigation.navigate("")
+                Linking.canOpenURL("http://instagram.com/_u/melahatun").then((supported)=>{
+                  if(supported){
+                    Linking.openURL("http://instagram.com/_u/melahatun")
+                  } else{
+
+                  }
+                })
+              }}>
                 <MaterialCommunityIcons
                   name="instagram"
                   size={30}
@@ -135,39 +146,39 @@ const navigator = createBottomTabNavigator(
         }
       })
     },
-    Twitter: {
-      screen: () => {
-        return (
-          <View>
-            {/* <MaterialCommunityIcons name="instagram" color="red" /> */}
-          </View>
-        );
-      },
-      navigationOptions: ({ navigation }) => ({
-        tabBarOnPress: () => {
-          navigation.navigate("");
-        },
-        tabBarIcon: () => {
-          return (
-            <View
-              style={{
-                borderColor: "green",
-                borderWidth: 0
-                //backgroundColor: "yellow"
-              }}
-            >
-              <TouchableOpacity onPress={() => navigation.navigate("")}>
-                <MaterialCommunityIcons
-                  name="twitter"
-                  size={30}
-                  color="#3AA1F2"
-                />
-              </TouchableOpacity>
-            </View>
-          );
-        }
-      })
-    },
+    // Twitter: {
+    //   screen: () => {
+    //     return (
+    //       <View>
+    //         {/* <MaterialCommunityIcons name="instagram" color="red" /> */}
+    //       </View>
+    //     );
+    //   },
+    //   navigationOptions: ({ navigation }) => ({
+    //     tabBarOnPress: () => {
+    //       navigation.navigate("");
+    //     },
+    //     tabBarIcon: () => {
+    //       return (
+    //         <View
+    //           style={{
+    //             borderColor: "green",
+    //             borderWidth: 0
+    //             //backgroundColor: "yellow"
+    //           }}
+    //         >
+    //           <TouchableOpacity onPress={() => navigation.navigate("")}>
+    //             <MaterialCommunityIcons
+    //               name="twitter"
+    //               size={30}
+    //               color="#3AA1F2"
+    //             />
+    //           </TouchableOpacity>
+    //         </View>
+    //       );
+    //     }
+    //   })
+    // },
     Facebook: {
       screen: () => {
         return (
@@ -189,7 +200,16 @@ const navigator = createBottomTabNavigator(
                 //backgroundColor: "yellow"
               }}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("")}>
+              <TouchableOpacity onPress={() => {
+                //navigation.navigate("")
+                Linking.canOpenURL("fb://profile/serifun").then((supported)=>{
+                  if(supported){
+                    Linking.openURL("fb://profile/serifun")
+                  } else{
+                    Linking.openURL("https://www.facebook.com/serifun")
+                  }
+                })
+              }}>
                 <AntDesign name="facebook-square" size={30} color="#3b5998" />
               </TouchableOpacity>
             </View>

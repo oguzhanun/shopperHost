@@ -19,6 +19,7 @@ import { Linking } from "expo";
 
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
+  const [shopsPosition, setShopsPosition] = useState();
   const [sehir, setSehir] = useState([]);
   const { state } = useContext(LanguageContext);
   const [language, setLanguage] = useState(state.language);
@@ -74,6 +75,12 @@ const CategoryScreen = ({ navigation }) => {
         const result = await axiosInstance.get(
           `/kategoriler/${kategori}/${sehir}`
         );
+
+        const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`)
+        
+        if(result2.data){
+          setShopsPosition(result2.data)
+        }
 
         if (result.data) {
           setCategories(result.data);
@@ -381,7 +388,7 @@ const CategoryScreen = ({ navigation }) => {
               bottom: 10,
               right: 10}}>
         <TouchableOpacity onPress={()=>{
-          navigation.navigate("Map")
+          navigation.navigate("Map", {shopsPosition})
         }}>
           <MaterialCommunityIcons
             name="map-marker-multiple"
