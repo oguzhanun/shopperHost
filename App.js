@@ -127,9 +127,9 @@ const navigator = createBottomTabNavigator(
             >
               <TouchableOpacity onPress={() => {
                 //navigation.navigate("")
-                Linking.canOpenURL("http://instagram.com/_u/melahatun").then((supported)=>{
+                Linking.canOpenURL("http://instagram.com/_u/Lak.Look").then((supported)=>{
                   if(supported){
-                    Linking.openURL("http://instagram.com/_u/melahatun")
+                    Linking.openURL("http://instagram.com/_u/Lak.Look")
                   } else{
 
                   }
@@ -202,11 +202,11 @@ const navigator = createBottomTabNavigator(
             >
               <TouchableOpacity onPress={() => {
                 //navigation.navigate("")
-                Linking.canOpenURL("fb://profile/serifun").then((supported)=>{
+                Linking.canOpenURL("fb://profile/LakLook.Tr").then((supported)=>{
                   if(supported){
-                    Linking.openURL("fb://profile/serifun")
+                    Linking.openURL("fb://profile/LakLook.Tr")
                   } else{
-                    Linking.openURL("https://www.facebook.com/serifun")
+                    Linking.openURL("https://www.facebook.com/LakLook.Tr")
                   }
                 })
               }}>

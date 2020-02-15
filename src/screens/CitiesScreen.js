@@ -140,10 +140,10 @@ CitiesScreen.navigationOptions = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           //navigation.navigate("Settings"); send?text=hello&
-          Linking.canOpenURL('whatsapp://send?phone=+905555550555').then((supported)=>{
+          Linking.canOpenURL('whatsapp://send?phone=+905383505515').then((supported)=>{
             if(supported){
-              Linking.openURL('whatsapp://send?phone=+905555550555')
-            } else Alert.alert("Warning", "You should install WhatsApp to use this feature.")
+              Linking.openURL('whatsapp://send?phone=+905383505515')
+            } else Alert.alert("Uyarı", "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir.")
           })
 
         }}

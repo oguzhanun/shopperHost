@@ -41,11 +41,11 @@ const RatingScreen = ({ navigation }) => {
         </View>
         <Formik
           initialValues={{
-            slider1: 4,
-            slider2: 4,
-            slider3: 4,
-            slider4: 4,
-            slider5: 4
+            slider1: 5,
+            slider2: 5,
+            slider3: 5,
+            slider4: 5,
+            slider5: 5
           }}
           onValueChange={values => {
             console.log(values);
@@ -79,7 +79,7 @@ const RatingScreen = ({ navigation }) => {
         >
           {props => (
             <View>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
                     HİZMET KALİTESİ:
@@ -90,17 +90,21 @@ const RatingScreen = ({ navigation }) => {
                 </View>
 
                 <Slider
-                  minimumTrackTintColor="gold"
-                  maximumTrackTintColor="grey"
-                  thumbTintColor="gold"
-                  trackStyle={{ height: 6 }}
+                  //thumbStyle={{justifyContent:"center", borderWidth:1, borderColor:"red"}}
                   style={{
                     backgroundColor: "grey",
+                    borderWidth:0, borderColor:"red",
                     height: 40,
                     borderRadius: 10,
                     marginVertical: 10,
                     marginHorizontal: 5
                   }}
+                  thumbTouchSize={{width:200, height:100}}
+                  trackStyle={{ height: 6 }}
+                  minimumTrackTintColor="gold"
+                  maximumTrackTintColor="grey"
+                  thumbTintColor="gold"
+                  
                   step={1}
                   minimumValue={0}
                   maximumValue={5}
@@ -108,7 +112,7 @@ const RatingScreen = ({ navigation }) => {
                   onValueChange={value => props.setFieldValue("slider1", value)}
                 />
               </View>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
                     HİZMET KALİTESİ:
@@ -129,6 +133,7 @@ const RatingScreen = ({ navigation }) => {
                     marginVertical: 10,
                     marginHorizontal: 5
                   }}
+                  thumbTouchSize={{width:200, height:100}}
                   step={1}
                   minimumValue={0}
                   maximumValue={5}
@@ -136,7 +141,7 @@ const RatingScreen = ({ navigation }) => {
                   onValueChange={value => props.setFieldValue("slider2", value)}
                 />
               </View>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
                     TEMİZLİK:
@@ -147,6 +152,7 @@ const RatingScreen = ({ navigation }) => {
                 </View>
 
                 <Slider
+                  thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
                   maximumTrackTintColor="grey"
                   thumbTintColor="gold"
@@ -165,7 +171,7 @@ const RatingScreen = ({ navigation }) => {
                   onValueChange={value => props.setFieldValue("slider3", value)}
                 />
               </View>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
                     LEZZET:
@@ -176,6 +182,7 @@ const RatingScreen = ({ navigation }) => {
                 </View>
 
                 <Slider
+                  thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
                   maximumTrackTintColor="grey"
                   thumbTintColor="gold"
@@ -194,7 +201,7 @@ const RatingScreen = ({ navigation }) => {
                   onValueChange={value => props.setFieldValue("slider4", value)}
                 />
               </View>
-              <View style={{ marginBottom: 10 }}>
+              <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
                     OTOPARK:
@@ -205,6 +212,7 @@ const RatingScreen = ({ navigation }) => {
                 </View>
 
                 <Slider
+                  thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
                   maximumTrackTintColor="grey"
                   thumbTintColor="gold"
@@ -256,14 +264,14 @@ RatingScreen.navigationOptions = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
-            Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+            Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
               supported => {
                 if (supported) {
-                  Linking.openURL("whatsapp://send?phone=+905555550555");
+                  Linking.openURL("whatsapp://send?phone=+905383505515");
                 } else
                   Alert.alert(
-                    "Warning",
-                    "You should install WhatsApp to use this feature."
+                    "Uyarı",
+                    "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir."
                   );
               }
             );

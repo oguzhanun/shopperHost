@@ -20,6 +20,7 @@ import {
 } from "@expo/vector-icons";
 import { NavigationEvents } from "react-navigation";
 import { Linking } from "expo";
+import { Rating } from "react-native-elements";
 
 const InfoScreen = ({ navigation }) => {
   const [thePlace, setThePlace] = useState("null");
@@ -209,7 +210,9 @@ const InfoScreen = ({ navigation }) => {
                     value={
                       <Text
                         style={{
-                          backgroundColor: "#F4AD33",//#E93F33
+                          backgroundColor: `${
+                            thePlace.indirim ? "#F4AD33" : "transparent"
+                          }`, //#E93F33
                           opacity: 1,
                           color: "white",
                           borderRadius: 15,
@@ -218,7 +221,7 @@ const InfoScreen = ({ navigation }) => {
                           transform: [{ rotate: "90deg" }]
                         }}
                       >
-                        -%10
+                        {thePlace.indirim ? `-%${thePlace.indirim}` : null}
                       </Text>
                     }
                     containerStyle={{
@@ -226,8 +229,9 @@ const InfoScreen = ({ navigation }) => {
                       backgroundColor: "white",
                       right: -15
                     }}
-                    badgeStyle={{ backgroundColor: "transparent", }}
+                    badgeStyle={{ backgroundColor: "transparent" }}
                   />
+
                   <View
                     style={{
                       height: height * 0.38,
@@ -249,11 +253,48 @@ const InfoScreen = ({ navigation }) => {
                           style={{
                             textAlign: "center",
                             fontSize: 22,
-                            fontWeight: "bold"
+                            fontWeight: "bold",
+                            textTransform:"capitalize"
                           }}
                         >
                           {thePlace.isim}
                         </Text>
+
+                        <View
+                          style={{
+                            marginTop:10,
+                            borderColor: "green",
+                            borderWidth: 0,
+                            alignItems: "center",
+                            flexDirection: "row",
+                            zIndex: 10,
+                            alignSelf:"center"
+                          }}
+                        >
+                          <Rating
+                            cancelable
+                            onStartRating={async e => {
+                              setPropagation(false);
+                              console.log("rating started");
+                              navigation.navigate("Rating", {
+                                data: { shopName: thePlace.isim, shopId: thePlace.id }
+                              });
+                            }}
+                            startingValue={thePlace.rating}
+                            fractions={20}
+                            imageSize={16}
+                            onFinishRating={() => {
+                              return null;
+                            }}
+                          />
+                          <Text style={{ marginLeft: 5, fontSize: 12 }}>
+                            (
+                            {thePlace.rating != null
+                              ? parseFloat(thePlace.rating).toFixed(2)
+                              : null}
+                            )
+                          </Text>
+                        </View>
 
                         <View style={{ marginVertical: 10 }}></View>
 
@@ -305,11 +346,10 @@ const InfoScreen = ({ navigation }) => {
                         position: "absolute",
                         bottom: -16,
                         right: -10,
-                        backgroundColor: "#eee",
+                        backgroundColor: "transparent",
+                        zIndex:10,
                         borderRadius: 8,
                         padding: 4,
-                        justifyContent: "flex-end",
-                        alignSelf: "flex-end",
                         borderColor: "red",
                         borderWidth: 0
                       }}
@@ -333,6 +373,7 @@ const InfoScreen = ({ navigation }) => {
                           color="#43862F" //#397DC6
                           name="navigation"
                           size={36}
+                          style={{alignSelf:"flex-end"}}
                         />
                       </TouchableOpacity>
                     </View>
@@ -406,14 +447,14 @@ InfoScreen.navigationOptions = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
-            Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+            Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
               supported => {
                 if (supported) {
-                  Linking.openURL("whatsapp://send?phone=+905555550555");
+                  Linking.openURL("whatsapp://send?phone=+905383505515");
                 } else
                   Alert.alert(
-                    "Warning",
-                    "You should install WhatsApp to use this feature."
+                    "Uyarı",
+                    "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir."
                   );
               }
             );

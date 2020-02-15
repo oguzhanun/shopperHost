@@ -6,8 +6,8 @@ import SafeAreaView from "react-native-safe-area-view";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Linking } from "expo";
 
-const MapScreen = ({navigation}) => {
-  const shopsPosition = navigation.getParam("shopsPosition")
+const MapScreen = ({ navigation }) => {
+  const shopsPosition = navigation.getParam("shopsPosition");
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
   //console.log(shopsPosition)
@@ -23,20 +23,22 @@ const MapScreen = ({navigation}) => {
           longitudeDelta: 5.0421
         }}
         style={{ width, height }}
-      >{
-        shopsPosition.map(shop=>{
-          console.log(shop.konum.split(",")[0])
-          
-          return(
+      >
+        {shopsPosition.map(shop => {
+          console.log(shop.konum.split(",")[0]);
+
+          return (
             <Marker
-          coordinate={{ latitude: parseFloat(shop.konum.split(",")[0]), longitude: parseFloat(shop.konum.split(",")[1]) }}
-          title={shop.isim}
-          description={"marker.description"}
-        />
-          )
-        })
-      }
-        
+              key={shop.isim}
+              coordinate={{
+                latitude: parseFloat(shop.konum.split(",")[0]),
+                longitude: parseFloat(shop.konum.split(",")[1])
+              }}
+              title={shop.isim}
+              description={"marker.description"}
+            />
+          );
+        })}
       </MapView>
     </SafeAreaView>
   );
@@ -48,14 +50,14 @@ MapScreen.navigationOptions = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           //navigation.navigate("Settings"); send?text=hello&
-          Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+          Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
             supported => {
               if (supported) {
-                Linking.openURL("whatsapp://send?phone=+905555550555");
+                Linking.openURL("whatsapp://send?phone=+905383505515");
               } else
                 Alert.alert(
-                  "Warning",
-                  "You should install WhatsApp to use this feature."
+                  "Uyarı",
+                  "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir."
                 );
             }
           );

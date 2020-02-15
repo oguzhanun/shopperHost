@@ -20,6 +20,7 @@ const ShopsScreen = ({ navigation }) => {
   const heightOfScreen = Dimensions.get("window").height;
   const [propagation, setPropagation] = useState(true)
   const [active, setActivity] = useState(true)
+  const [shopsPosition, setShopsPosition] = useState();
 
   const responder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -46,6 +47,12 @@ const ShopsScreen = ({ navigation }) => {
         const result = await axiosInstance.get(
           `/dukkanlar/${sehir}/${kategori}`
         );
+
+        const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}/${kategori}`)
+        
+        if(result2.data){
+          setShopsPosition(result2.data)
+        }
 
         if (result.data) {
           await setShops(result.data);
@@ -225,7 +232,7 @@ const ShopsScreen = ({ navigation }) => {
                         />
                         
                           <Text style={{ marginLeft: 5, fontSize: 12 }}>
-                            ({item.rating})
+                            ({item.rating != null ? parseFloat(item.rating).toFixed(2) : null })
                           </Text>
                         
                       </View>
@@ -276,7 +283,7 @@ const ShopsScreen = ({ navigation }) => {
               right: 10}}>
         <TouchableOpacity onPress={()=>{
           if(active)
-          navigation.navigate("Map")
+          navigation.navigate("Map",{shopsPosition})
         }}>
           <MaterialCommunityIcons
             name="map-marker-multiple"
@@ -325,14 +332,14 @@ ShopsScreen.navigationOptions = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
-            Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+            Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
               supported => {
                 if (supported) {
-                  Linking.openURL("whatsapp://send?phone=+905555550555");
+                  Linking.openURL("whatsapp://send?phone=+905383505515");
                 } else
                   Alert.alert(
-                    "Warning",
-                    "You should install WhatsApp to use this feature."
+                    "Uyarı",
+                    "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir."
                   );
               }
             );

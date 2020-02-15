@@ -14,11 +14,9 @@ import { NavigationEvents } from "react-navigation";
 import SafeAreaView from "react-native-safe-area-view";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
-import * as SQLite from "expo-sqlite";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+//import * as SQLite from "expo-sqlite";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import publicIP from "react-native-public-ip";
-import axios from "axios"
 import { Linking } from "expo";
 
 const OpenningScreen = ({ navigation }) => {
@@ -34,9 +32,7 @@ const OpenningScreen = ({ navigation }) => {
   
 
   useEffect(() => {
-    publicIP().then(ip => {
-      console.log("IP:", ip);
-    });
+   
 
     if (counter <= 1) {
       NetInfo.fetch().then(async state => {
@@ -46,14 +42,14 @@ const OpenningScreen = ({ navigation }) => {
           setConnection(state.isConnected);
         }
 
-        const db = await SQLite.openDatabase("applaklak");
+        //const db = await SQLite.openDatabase("applaklak");
 
         let deviceLanguage =
           Platform.OS === "ios"
             ? NativeModules.SettingsManager.settings.AppleLocale
             : NativeModules.I18nManager.localeIdentifier;
 
-        if (Platform.OS === "ios") {
+        //if (Platform.OS === "ios") {
           const deviceLang = await AsyncStorage.getItem("deviceLang");
 
           if (deviceLang) {
@@ -66,56 +62,56 @@ const OpenningScreen = ({ navigation }) => {
               changeLanguage("TR");
             }
           }
-        } else {
-          try {
-            await db.transaction(
-              tx => {
-                tx.executeSql(
-                  "create table if not exists ayar1 (id integer primary key not null, language TEXT unique);"
-                );
-              },
-              (err, succ) => {
-                if (err) {
-                  console.log(err);
-                }
-              }
-            )
+        // } else {
+        //   try {
+        //     await db.transaction(
+        //       tx => {
+        //         tx.executeSql(
+        //           "create table if not exists ayar1 (id integer primary key not null, language TEXT unique);"
+        //         );
+        //       },
+        //       (err, succ) => {
+        //         if (err) {
+        //           console.log(err);
+        //         }
+        //       }
+        //     )
 
-            // await db.transaction(tx=>{
-            //   tx.executeSql(`delete from ayar where id= ?;`, [2])
-            // })
+        //     // await db.transaction(tx=>{
+        //     //   tx.executeSql(`delete from ayar where id= ?;`, [2])
+        //     // })
 
-            await db.transaction(tx => {
-              tx.executeSql(`select * from ayar1;`, [], async (tx, set) => {
+        //     await db.transaction(tx => {
+        //       tx.executeSql(`select * from ayar1;`, [], async (tx, set) => {
 
-                if (set.rows._array[0].language) {
-                  let dbLanguage = set.rows._array[0].language;
-                  console.log("dbLanguage ----> : ", dbLanguage);
-                  changeLanguage(dbLanguage);
-                } else {
-                  if (deviceLanguage) {
-                    let lang = deviceLanguage.split("_");
-                    changeLanguage(lang[1]);
-                    console.log("device language :", lang[1]);
-                  } else {
-                    deviceLanguage = "tr_TR";
-                    changeLanguage("TR");
-                  }
+        //         if (set.rows._array[0].language) {
+        //           let dbLanguage = set.rows._array[0].language;
+        //           console.log("dbLanguage ----> : ", dbLanguage);
+        //           changeLanguage(dbLanguage);
+        //         } else {
+        //           if (deviceLanguage) {
+        //             let lang = deviceLanguage.split("_");
+        //             changeLanguage(lang[1]);
+        //             console.log("device language :", lang[1]);
+        //           } else {
+        //             deviceLanguage = "tr_TR";
+        //             changeLanguage("TR");
+        //           }
                   
-                  let lange = deviceLanguage.split("_");
+        //           let lange = deviceLanguage.split("_");
 
-                  await db.transaction(tx => {
-                    tx.executeSql(`insert into ayar1 (language) values (?);`, [
-                      lange[1]]);
-                  });
-                }
-                console.log("SET : ", set)
-              });
-            });
-          } catch (e) {
-            console.log("error : ", e);
-          }
-        }
+        //           await db.transaction(tx => {
+        //             tx.executeSql(`insert into ayar1 (language) values ('${lange[1]}');`, []
+        //               );
+        //           });
+        //         }
+        //         console.log("SET : ", set)
+        //       });
+        //     });
+        //   } catch (e) {
+        //     console.log("error : ", e);
+        //   }
+        // }
       });
 
       if (connection) {
@@ -208,14 +204,14 @@ OpenningScreen.navigationOptions = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           //navigation.navigate("Settings"); send?text=hello&
-          Linking.canOpenURL("whatsapp://send?phone=+905555550555").then(
+          Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
             supported => {
               if (supported) {
-                Linking.openURL("whatsapp://send?phone=+905555550555");
+                Linking.openURL("whatsapp://send?phone=+905383505515");
               } else
                 Alert.alert(
-                  "Warning",
-                  "You should install WhatsApp to use this feature."
+                  "Uyarı",
+                  "Bu özelliği kullanabilmeniz için WhatsApp uygulamasını telefonunuza yüklemeniz gerekmektedir."
                 );
             }
           );
