@@ -27,6 +27,7 @@ const CategoryScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
   const [connection, setConnection] = useState(false);
+  const [foto, setFoto] = useState("fotograf")
 
   const responder = PanResponder.create({
     onMoveShouldSetPanResponder: (evt, gestureState) =>
@@ -43,38 +44,46 @@ const CategoryScreen = ({ navigation }) => {
       if (state.isConnected) {
         setConnection(true);
 
-        const sehir = navigation.getParam("sehir");
+        const {sehir} = navigation.getParam("data");
 
         if (sehir) {
           await setSehir(sehir);
+          navigation.navigate("Category",{sehir})
         }
 
-        let kategori = "kategori";
+        let kategori = "kategori_adi";
 
         //Dil seçeneğine bağlı olarak yapılacak http talebi değişiyor.
-        //Şu an bu değişime ihtiyaç yok.
         switch (language) {
           case "TR":
-            kategori = "kategori";
+            kategori = "kategori_adi";
+            setFoto("fotograf")
             break;
           case "EN":
-            kategori = "kategoriEN";
+            kategori = "kategori_adi_EN";
+            setFoto("fotograf_EN")
             break;
           case "AR":
-            kategori = "kategoriAR";
+            kategori = "kategori_adi_AR";
+            setFoto("fotograf_AR")
             break;
           case "DE":
-            kategori = "kategoriDE";
+            kategori = "kategori_adi_DE";
+            setFoto("fotograf_DE")
             break;
           case "RU":
-            kategori = "kategoriRU";
+            kategori = "kategori_adi_RU";
+            setFoto("fotograf_RU")
             break;
           default:
-            kategori = "kategori";
+            kategori = "kategori_adi";
+            setFoto("fotograf")
         }
 
+
+
         const result = await axiosInstance.get(
-          `/kategoriler/${kategori}/${sehir}`
+          `/kategoriler/${kategori}`
         );
 
         const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`)
@@ -143,48 +152,12 @@ const CategoryScreen = ({ navigation }) => {
                   {categories
                     .slice(0, Math.ceil(categories.length / 2))
                     .map(kat => {
-                      let source;
-                      let specialHeight;
-                      switch (kat.kategori.toLowerCase().replace(" ", "")) {
-                        case "mobilya":
-                          source = require("../../assets/images/kategoriler/mobilya.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "çikolata":
-                          source = require("../../assets/images/kategoriler/cikolata.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "genelalışveriş":
-                          source = require("../../assets/images/kategoriler/genel.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "turistik":
-                          source = require("../../assets/images/kategoriler/geziyeri.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "hediyelik":
-                          source = require("../../assets/images/kategoriler/hediyelik.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "mücevher":
-                          source = require("../../assets/images/kategoriler/mucevher.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "giyim":
-                          source = require("../../assets/images/kategoriler/giyim.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        case "züccaciye":
-                          source = require("../../assets/images/kategoriler/zuccaciye.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          break;
-                        default:
-                          source = require("../../assets/images/kategoriler/genel.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                      }
+                      //let source;
+                      let specialHeight = heightOfScreen * 0.25
+                      
                       return (
                         <View
-                          key={source.toString()}
+                          key={kat.kategori_adi.toString()}
                           style={{
                             borderColor: "green",
                             borderWidth: 0,
@@ -199,7 +172,7 @@ const CategoryScreen = ({ navigation }) => {
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
-                                  kategori: kat.kategori
+                                  kategori: kat.kategori_adi
                                 }
                               });
                             }}
@@ -213,7 +186,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight //heightOfScreen * 0.2
                                 }}
-                                source={source}
+                                source={{uri:`http://192.168.1.8:3001${kat[foto]}`}}
                               />
                               <Text
                                 style={{
@@ -228,21 +201,21 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategoriAR
-                                  ? kat.kategoriAR.charAt(0).toUpperCase() +
-                                    kat.kategoriAR.substring(1)
-                                  : null || kat.kategoriDE
-                                  ? kat.kategoriDE.charAt(0).toUpperCase() +
-                                    kat.kategoriDE.substring(1)
-                                  : null || kat.kategoriEN
-                                  ? kat.kategoriEN.charAt(0).toUpperCase() +
-                                    kat.kategoriEN.substring(1)
-                                  : null || kat.kategoriRU
-                                  ? kat.kategoriRU.charAt(0).toUpperCase() +
-                                    kat.kategoriRU.substring(1)
-                                  : null || kat.kategori
-                                  ? kat.kategori.charAt(0).toUpperCase() +
-                                    kat.kategori.substring(1)
+                                {kat.kategori_adi_AR
+                                  ? kat.kategori_adi_AR.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_AR.substring(1)
+                                  : null || kat.kategori_adi_DE
+                                  ? kat.kategori_adi_DE.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_DE.substring(1)
+                                  : null || kat.kategori_adi_EN
+                                  ? kat.kategori_adi_EN.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_EN.substring(1)
+                                  : null || kat.kategori_adi_RU
+                                  ? kat.kategori_adi_RU.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_RU.substring(1)
+                                  : null || kat.kategori_adi
+                                  ? kat.kategori_adi.charAt(0).toUpperCase() +
+                                    kat.kategori_adi.substring(1)
                                   : null}
                               </Text>
                             </View>
@@ -264,58 +237,12 @@ const CategoryScreen = ({ navigation }) => {
                   {categories
                     .slice(Math.ceil(categories.length / 2), categories.length)
                     .map(kat => {
-                      let source;
-                      let specialHeight;
-                      let specialWidth;
-                      switch (kat.kategori.toLowerCase().replace(" ", "")) {
-                        case "mobilya":
-                          source = require("../../assets/images/kategoriler/mobilya.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "çikolata":
-                          source = require("../../assets/images/kategoriler/cikolata.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "genelalışveriş":
-                          source = require("../../assets/images/kategoriler/genel.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "turistik":
-                          source = require("../../assets/images/kategoriler/geziyeri.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "hediyelik":
-                          source = require("../../assets/images/kategoriler/hediyelik.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "mücevher":
-                          source = require("../../assets/images/kategoriler/mucevher.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "giyim":
-                          source = require("../../assets/images/kategoriler/giyim.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        case "züccaciye":
-                          source = require("../../assets/images/kategoriler/zuccaciye.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                          break;
-                        default:
-                          source = require("../../assets/images/kategoriler/genel.jpg");
-                          specialHeight = heightOfScreen * 0.25;
-                          specialWidth = widthOfScreen * 0.45;
-                      }
+                      //let source;
+                      let specialHeight = heightOfScreen * 0.25
+                      
                       return (
                         <View
-                          key={source.toString()}
+                          key={kat.kategori_adi.toString()}
                           style={{ borderColor: "green", borderWidth: 0 }}
                         >
                           <TouchableOpacity
@@ -326,7 +253,7 @@ const CategoryScreen = ({ navigation }) => {
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
-                                  kategori: kat.kategori
+                                  kategori: kat.kategori_adi
                                 }
                               });
                             }}
@@ -341,7 +268,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight
                                 }}
-                                source={source}
+                                source={{uri:`http://192.168.1.8:3001${kat[foto]}`}}
                               />
                               <Text
                                 style={{
@@ -356,21 +283,21 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategoriAR
-                                  ? kat.kategoriAR.charAt(0).toUpperCase() +
-                                    kat.kategoriAR.substring(1)
-                                  : null || kat.kategoriDE
-                                  ? kat.kategoriDE.charAt(0).toUpperCase() +
-                                    kat.kategoriDE.substring(1)
-                                  : null || kat.kategoriEN
-                                  ? kat.kategoriEN.charAt(0).toUpperCase() +
-                                    kat.kategoriEN.substring(1)
-                                  : null || kat.kategoriRU
-                                  ? kat.kategoriRU.charAt(0).toUpperCase() +
-                                    kat.kategoriRU.substring(1)
-                                  : null || kat.kategori
-                                  ? kat.kategori.charAt(0).toUpperCase() +
-                                    kat.kategori.substring(1)
+                                {kat.kategori_adi_AR
+                                  ? kat.kategori_adi_AR.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_AR.substring(1)
+                                  : null || kat.kategori_adi_DE
+                                  ? kat.kategori_adi_DE.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_DE.substring(1)
+                                  : null || kat.kategori_adi_EN
+                                  ? kat.kategori_adi_EN.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_EN.substring(1)
+                                  : null || kat.kategori_adi_RU
+                                  ? kat.kategori_adi_RU.charAt(0).toUpperCase() +
+                                    kat.kategori_adi_RU.substring(1)
+                                  : null || kat.kategori_adi
+                                  ? kat.kategori_adi.charAt(0).toUpperCase() +
+                                    kat.kategori_adi.substring(1)
                                   : null}
                               </Text>
                             </View>
@@ -446,8 +373,62 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
           <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
         </View>
       </TouchableOpacity>
-    )
+    ),
+    
+    headerTitle:<Text style={{color:"#43862F", fontWeight:"bold", fontSize:22}}>{navigation.getParam("sehir")}</Text>,
+
+    headerStyle:{
+      //
+    }
+    // titleStyle:{
+    //   //backgroundColor:"green",
+    //   margin:0,
+    //   padding:0,
+    //   top:-3,
+    //   left:-15,
+    //   width:80,
+    //   height:80  
+    // }
   }
 };
 
 export default CategoryScreen;
+
+
+// switch (kat.kategori.toLowerCase().replace(" ", "")) {
+//   case "mobilya":
+//     source = require("../../assets/images/kategoriler/mobilya.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "çikolata":
+//     source = require("../../assets/images/kategoriler/cikolata.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "genelalışveriş":
+//     source = require("../../assets/images/kategoriler/genel.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "turistik":
+//     source = require("../../assets/images/kategoriler/geziyeri.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "hediyelik":
+//     source = require("../../assets/images/kategoriler/hediyelik.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "mücevher":
+//     source = require("../../assets/images/kategoriler/mucevher.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "giyim":
+//     source = require("../../assets/images/kategoriler/giyim.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   case "züccaciye":
+//     source = require("../../assets/images/kategoriler/zuccaciye.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+//     break;
+//   default:
+//     source = require("../../assets/images/kategoriler/genel.jpg");
+//     specialHeight = heightOfScreen * 0.25;
+// }

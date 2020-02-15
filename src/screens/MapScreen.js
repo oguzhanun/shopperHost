@@ -17,10 +17,10 @@ const MapScreen = ({ navigation }) => {
       <MapView
         showsUserLocation={true}
         initialRegion={{
-          latitude: 40.197996,
-          longitude: 29.06112,
-          latitudeDelta: 5.0922,
-          longitudeDelta: 5.0421
+          latitude: 39.797682, 
+          longitude: 33.509642,
+          latitudeDelta: 10.0922,
+          longitudeDelta: 15.0421
         }}
         style={{ width, height }}
       >

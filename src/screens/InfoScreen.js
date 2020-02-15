@@ -253,6 +253,7 @@ const InfoScreen = ({ navigation }) => {
                           style={{
                             textAlign: "center",
                             fontSize: 22,
+                            
                             fontWeight: "bold",
                             textTransform:"capitalize"
                           }}
