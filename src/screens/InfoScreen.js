@@ -31,6 +31,7 @@ const InfoScreen = ({ navigation }) => {
   const itemWidth = sliderWidth;
   const [index, setIndex] = useState(0);
   const [tap, setTap] = useState({});
+  const [shopName, setShopName] = useState()
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
@@ -81,6 +82,9 @@ const InfoScreen = ({ navigation }) => {
 
           console.log("DÜKKAN : ", dataAdjusted);
           setThePlace(dataAdjusted[0]);
+          setShopName(thePlace.isim)
+          console.log("isim",thePlace.isim)
+          console.log("SHOPNAME:", shopName)
         }
       }
     });
@@ -99,6 +103,7 @@ const InfoScreen = ({ navigation }) => {
     >
       <NavigationEvents
         onDidFocus={() => {
+          navigation.navigate("Info")
           setLanguage(state.language);
         }}
       />
@@ -155,6 +160,7 @@ const InfoScreen = ({ navigation }) => {
                           borderRadius: 5
                         }}
                       >
+                        
                         <Image
                           style={{
                             resizeMode: "contain",
@@ -164,7 +170,7 @@ const InfoScreen = ({ navigation }) => {
                             marginHorizontal: 0
                           }}
                           source={{
-                            uri: `http://192.168.1.8:3001${item.resim}`
+                            uri: `http://37.247.107.18:1818${item.resim}`
                           }}
                         />
                       </View>
@@ -239,13 +245,6 @@ const InfoScreen = ({ navigation }) => {
                       borderColor: "red",
                       borderWidth: 0
                     }}
-                    // showsVerticalScrollIndicator={false}
-                    // data={[thePlace.isim]}
-                    // keyExtractor={(item, index) => {
-                    //   return index.toString();
-                    // }}
-                    // renderItem={({ item }) => {
-                    //   return (
                   >
                     <ScrollView showsVerticalScrollIndicator={false}>
                       <View style={{ marginHorizontal: 5 }}>
@@ -253,7 +252,6 @@ const InfoScreen = ({ navigation }) => {
                           style={{
                             textAlign: "center",
                             fontSize: 22,
-                            
                             fontWeight: "bold",
                             textTransform:"capitalize"
                           }}
@@ -273,13 +271,11 @@ const InfoScreen = ({ navigation }) => {
                           }}
                         >
                           <Rating
-                            cancelable
-                            onStartRating={async e => {
-                              setPropagation(false);
+                            onStartRating={ () => {
                               console.log("rating started");
-                              navigation.navigate("Rating", {
-                                data: { shopName: thePlace.isim, shopId: thePlace.id }
-                              });
+                              console.log("shopName : ", thePlace)
+                              console.log(shopName)
+                              navigation.navigate("Rating",{data:{shopName:thePlace.isim, shopId:thePlace.id}})
                             }}
                             startingValue={thePlace.rating}
                             fractions={20}
@@ -290,7 +286,7 @@ const InfoScreen = ({ navigation }) => {
                           />
                           <Text style={{ marginLeft: 5, fontSize: 12 }}>
                             (
-                            {thePlace.rating != null
+                            {(thePlace.rating != null)
                               ? parseFloat(thePlace.rating).toFixed(2)
                               : null}
                             )
@@ -339,9 +335,7 @@ const InfoScreen = ({ navigation }) => {
                         </TouchableOpacity>
                       </View>
                     </ScrollView>
-                    {/* <View
-                      style={{ marginTop: 12, zIndex: 1, marginHorizontal: 0 }}
-                    > */}
+                    
                     <View
                       style={{
                         position: "absolute",

@@ -61,7 +61,7 @@ const RatingScreen = ({ navigation }) => {
             }
             ortalama = toplam / 5;
             console.log("ORTALAMA:", ortalama);
-            const response = await axios("http://192.168.1.8:3001/ratings/give/rate",{
+            const response = await axios("http://37.247.107.18:1818/ratings/give/rate",{
               method:"post",
               data:{
                 ortalama,
@@ -71,8 +71,9 @@ const RatingScreen = ({ navigation }) => {
                 rateGiverId:55
               }
             })
+            console.log("Response : ",response.data)
             if(response.data == "ok"){
-              navigation.navigate("Shops")
+              navigation.goBack()
             }
 
           }}

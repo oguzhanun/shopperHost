@@ -186,7 +186,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight //heightOfScreen * 0.2
                                 }}
-                                source={{uri:`http://192.168.1.8:3001${kat[foto]}`}}
+                                source={{uri:`http://37.247.107.18:1818${kat[foto]}`}}
                               />
                               <Text
                                 style={{
@@ -268,7 +268,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight
                                 }}
-                                source={{uri:`http://192.168.1.8:3001${kat[foto]}`}}
+                                source={{uri:`http://37.247.107.18:1818${kat[foto]}`}}
                               />
                               <Text
                                 style={{

@@ -44,6 +44,7 @@ const ShopsScreen = ({ navigation }) => {
           await setCategory(kategori);
         }
 
+        console.log("şehir ::::>>>>", sehir)
         const result = await axiosInstance.get(
           `/dukkanlar/${sehir}/${kategori}`
         );
@@ -58,14 +59,7 @@ const ShopsScreen = ({ navigation }) => {
           await setShops(result.data);
           console.log("Shops Info: ", result.data);
         }
-      } else {
-        return (
-          <View>
-            <Text>Please Check Your Internet Connection!</Text>
-            <ActivityIndicator size="large" color="#00ff00" />
-          </View>
-        );
-      }
+      } 
     });
   }, []);
 
@@ -81,6 +75,7 @@ const ShopsScreen = ({ navigation }) => {
           setActivity(false)
         }}
       />
+      {shops.length === 0 ? <Text style={{textAlign:"center"}}>Üzgünüz! Henüz bu kategoride bir içerik eklenmemiştir...</Text> : null }
       <FlatList
         data={shops}
         keyExtractor={item => {
@@ -123,7 +118,7 @@ const ShopsScreen = ({ navigation }) => {
                       marginHorizontal: 10,
                       marginVertical: 10
                     }}
-                    source={{ uri: `http://192.168.1.8:3001${item.resim1}` }} //37.247.107.18:1818
+                    source={{ uri: `http://37.247.107.18:1818${item.resim1}` }} //37.247.107.18:1818
                   />
                   <View
                     style={{
@@ -144,8 +139,8 @@ const ShopsScreen = ({ navigation }) => {
                         fontWeight: "bold"
                       }}
                     >
-                      {item.isim.charAt(0).toUpperCase() +
-                        item.isim.substring(1)}
+                      {item.isim ? item.isim.charAt(0).toUpperCase() +
+                        item.isim.substring(1) : null}
                     </Text>
                     <TouchableOpacity
                       onPress={() => {
@@ -213,7 +208,7 @@ const ShopsScreen = ({ navigation }) => {
                         
                         <Rating
                           cancelable
-                          onStartRating={async (e) => {
+                          onStartRating={() => {
 
                             setPropagation(false)
 

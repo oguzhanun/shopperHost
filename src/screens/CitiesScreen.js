@@ -30,7 +30,7 @@ const CitiesScreen = ({ navigation }) => {
       if (state.isConnected) {
         setConnection(true);
         const result = await axiosInstance.get("/sehirler");
-
+        console.log(result.data)
         if (result.data) {
           await setCities(result.data);
           
@@ -87,8 +87,7 @@ const CitiesScreen = ({ navigation }) => {
                     alignItems: "center"
                   }}
                 >
-                  {cities
-                    .slice(0, Math.ceil(cities.length / 2))
+                  {cities ? cities.slice(0, Math.ceil(cities.length / 2))
                     .map(city => {
                       let source;
                       let specialHeight = heightOfScreen * 0.25
@@ -123,7 +122,7 @@ const CitiesScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight //heightOfScreen * 0.2
                                 }}
-                                source={{uri: `http://192.168.1.8:3001${city.fotograf}`}}
+                                source={{uri: `http://37.247.107.18:1818${city.fotograf}`}}
                               />
                               {/* <Text
                                 style={{
@@ -159,7 +158,7 @@ const CitiesScreen = ({ navigation }) => {
                           </TouchableOpacity>
                         </View>
                       );
-                    })}
+                    }) : null}
                 </View>
                 <View
                   style={{
@@ -203,7 +202,7 @@ const CitiesScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight
                                 }}
-                                source={{uri: `http://192.168.1.8:3001${city.fotograf}`}}
+                                source={{uri: `http://37.247.107.18:1818${city.fotograf}`}}
                               />
                               {/* <Text
                                 style={{
