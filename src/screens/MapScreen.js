@@ -13,16 +13,15 @@ const MapScreen = ({ navigation }) => {
   //console.log(shopsPosition)
 
   return (
-    <SafeAreaView forceInset={{ top: "never" }}>
+    <View style={{flex:1}}>
       <MapView
-        showsUserLocation={true}
         initialRegion={{
           latitude: 39.797682, 
           longitude: 33.509642,
           latitudeDelta: 10.0922,
           longitudeDelta: 15.0421
         }}
-        style={{ width, height }}
+        style={{ flex:1 }} 
       >
         {shopsPosition.map(shop => {
           console.log(shop.konum.split(",")[0]);
@@ -40,7 +39,7 @@ const MapScreen = ({ navigation }) => {
           );
         })}
       </MapView>
-    </SafeAreaView>
+    </View>
   );
 };
 
