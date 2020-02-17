@@ -9,11 +9,11 @@ import { Linking } from "expo";
 const MapScreen = ({ navigation }) => {
   const shopsPosition = navigation.getParam("shopsPosition");
   const width = Dimensions.get("window").width;
-  const height = Dimensions.get("window").height-10;
+  const height = Dimensions.get("window").height;
   //console.log(shopsPosition)
 
   return (
-    <SafeAreaView>
+    <View style={{flex:1}}>
       <MapView
         initialRegion={{
           latitude: 39.797682, 
@@ -39,7 +39,7 @@ const MapScreen = ({ navigation }) => {
           );
         })}
       </MapView>
-    </SafeAreaView>
+    </View>
   );
 };
 

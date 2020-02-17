@@ -27,7 +27,12 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.keyplus.applaklook",
+      "package": "com.keyplus.applaklak",
+      "config":{
+        "googleMaps": {
+          "apiKey": "AIzaSyBW-YcbazqPvo7-JY-bxocMGXFI0nirbho"
+        }
+      },
       "permissions" : [],
       "versionCode": 3
     },
