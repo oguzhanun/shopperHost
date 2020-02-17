@@ -31,7 +31,7 @@ const InfoScreen = ({ navigation }) => {
   const itemWidth = sliderWidth;
   const [index, setIndex] = useState(0);
   const [tap, setTap] = useState({});
-  const [shopName, setShopName] = useState()
+  const [shopName, setShopName] = useState();
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
@@ -82,9 +82,9 @@ const InfoScreen = ({ navigation }) => {
 
           console.log("DÜKKAN : ", dataAdjusted);
           setThePlace(dataAdjusted[0]);
-          setShopName(thePlace.isim)
-          console.log("isim",thePlace.isim)
-          console.log("SHOPNAME:", shopName)
+          setShopName(thePlace.isim);
+          console.log("isim", thePlace.isim);
+          console.log("SHOPNAME:", shopName);
         }
       }
     });
@@ -103,7 +103,7 @@ const InfoScreen = ({ navigation }) => {
     >
       <NavigationEvents
         onDidFocus={() => {
-          navigation.navigate("Info")
+          navigation.navigate("Info");
           setLanguage(state.language);
         }}
       />
@@ -160,7 +160,6 @@ const InfoScreen = ({ navigation }) => {
                           borderRadius: 5
                         }}
                       >
-                        
                         <Image
                           style={{
                             resizeMode: "contain",
@@ -253,7 +252,7 @@ const InfoScreen = ({ navigation }) => {
                             textAlign: "center",
                             fontSize: 22,
                             fontWeight: "bold",
-                            textTransform:"capitalize"
+                            textTransform: "capitalize"
                           }}
                         >
                           {thePlace.isim}
@@ -261,32 +260,46 @@ const InfoScreen = ({ navigation }) => {
 
                         <View
                           style={{
-                            marginTop:10,
+                            marginTop: 10,
                             borderColor: "green",
                             borderWidth: 0,
                             alignItems: "center",
                             flexDirection: "row",
                             zIndex: 10,
-                            alignSelf:"center"
+                            alignSelf: "center"
                           }}
                         >
-                          <Rating
-                            onStartRating={ () => {
-                              console.log("rating started");
-                              console.log("shopName : ", thePlace)
-                              console.log(shopName)
-                              navigation.navigate("Rating",{data:{shopName:thePlace.isim, shopId:thePlace.id}})
+                          <TouchableOpacity
+                            onPress={() => {
+                              navigation.navigate("Rating", {
+                                data: {
+                                  shopName: thePlace.isim,
+                                  shopId: thePlace.id
+                                }
+                              });
                             }}
-                            startingValue={thePlace.rating}
-                            fractions={20}
-                            imageSize={16}
-                            onFinishRating={() => {
-                              return null;
-                            }}
-                          />
+                          >
+                            <Rating
+                              onStartRating={()=>{
+                                navigation.navigate("Rating", {
+                                  data: {
+                                    shopName: thePlace.isim,
+                                    shopId: thePlace.id
+                                  }
+                                });
+                              }}
+                              startingValue={thePlace.rating}
+                              fractions={20}
+                              imageSize={16}
+                              onFinishRating={() => {
+                                return null;
+                              }}
+                            />
+                          </TouchableOpacity>
+
                           <Text style={{ marginLeft: 5, fontSize: 12 }}>
                             (
-                            {(thePlace.rating != null)
+                            {thePlace.rating != null
                               ? parseFloat(thePlace.rating).toFixed(2)
                               : null}
                             )
@@ -335,14 +348,14 @@ const InfoScreen = ({ navigation }) => {
                         </TouchableOpacity>
                       </View>
                     </ScrollView>
-                    
+
                     <View
                       style={{
                         position: "absolute",
                         bottom: -16,
                         right: -10,
                         backgroundColor: "transparent",
-                        zIndex:10,
+                        zIndex: 10,
                         borderRadius: 8,
                         padding: 4,
                         borderColor: "red",
@@ -368,42 +381,12 @@ const InfoScreen = ({ navigation }) => {
                           color="#43862F" //#397DC6
                           name="navigation"
                           size={36}
-                          style={{alignSelf:"flex-end"}}
+                          style={{ alignSelf: "flex-end" }}
                         />
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {/* </View> */}
                 </Card>
-
-                {/* <View
-                    style={{ marginTop: 12, zIndex: 1, marginHorizontal: 0 }}
-                  >
-                    <Button
-                      buttonStyle={{
-                        backgroundColor: "purple",
-                        borderRadius: 10
-                      }}
-                      title={`GO TO  ${
-                        thePlace.isim == null
-                          ? thePlace.isim
-                          : thePlace.isim.toUpperCase()
-                      }`}
-                      onPress={() => {
-                        const scheme = Platform.select({
-                          ios: "maps:0,0?q=",
-                          android: "geo:0,0?q="
-                        });
-                        const latLng = `${thePlace.konum}`;
-                        const label = `${thePlace.isim}`;
-                        const url = Platform.select({
-                          ios:`${scheme}${label}@${latLng}`,
-                          android:`${scheme}${latLng}(${label})`
-                        });
-                        Linking.openURL(url);
-                      }}
-                    />
-                  </View> */}
               </Card>
             </View>
           );

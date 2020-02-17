@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, PanResponder, Dimensions,TouchableWithoutFeedback } from "react-native";
+import { View, Text, Image, PanResponder, Dimensions } from "react-native";
 import axiosInstance from "../api/axiosInstance";
 import { FlatList, TouchableOpacity, TouchableHighlight } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
@@ -9,7 +9,6 @@ import { MaterialIcons, Feather, MaterialCommunityIcons } from "@expo/vector-ico
 import { Linking } from "expo";
 import { Rating } from "react-native-elements";
 import SafeAreaView from "react-native-safe-area-view";
-import { stopAsync } from "expo/build/AR";
 
 const ShopsScreen = ({ navigation }) => {
   const [shops, setShops] = useState([]);
@@ -22,13 +21,13 @@ const ShopsScreen = ({ navigation }) => {
   const [active, setActivity] = useState(true)
   const [shopsPosition, setShopsPosition] = useState();
 
-  const responder = PanResponder.create({
-    onMoveShouldSetPanResponder: (evt, gestureState) => true,
-    onPanResponderMove: (evt, gestureState) => {
-      return true;
-    },
-    onPanResponderTerminationRequest: (evt, gestureState) => true
-  });
+  // const responder = PanResponder.create({
+  //   onMoveShouldSetPanResponder: (evt, gestureState) => true,
+  //   onPanResponderMove: (evt, gestureState) => {
+  //     return true;
+  //   },
+  //   onPanResponderTerminationRequest: (evt, gestureState) => true
+  // });
 
   useEffect(() => {
     //navigation.navigate("Shops", { lang: state.language });
@@ -61,10 +60,13 @@ const ShopsScreen = ({ navigation }) => {
         }
       } 
     });
-  }, []);
+  }, [propagation]);
 
-  return (
-    <SafeAreaView forceInset={{top:"never"}} style={{flex:1, marginTop: 10 }} {...responder.panHandlers}>
+  {/*{...responder.panHandlers} */}
+{/* {shops.length === 0 ? <Text style={{textAlign:"center"}}>Üzgünüz! Henüz bu kategoride bir içerik eklenmemiştir...</Text> : null } */}
+  
+return (
+    <SafeAreaView forceInset={{top:"never"}} style={{flex:1, marginTop: 10 }}> 
       <NavigationEvents
         onDidFocus={() => {
           setPropagation(true)
@@ -75,7 +77,7 @@ const ShopsScreen = ({ navigation }) => {
           setActivity(false)
         }}
       />
-      {shops.length === 0 ? <Text style={{textAlign:"center"}}>Üzgünüz! Henüz bu kategoride bir içerik eklenmemiştir...</Text> : null }
+      
       <FlatList
         data={shops}
         keyExtractor={item => {
@@ -93,7 +95,7 @@ const ShopsScreen = ({ navigation }) => {
                     data: {
                       shopId: item.id
                     }
-                  });
+                  })
                 }}
               >
                 <View
@@ -210,19 +212,19 @@ const ShopsScreen = ({ navigation }) => {
                           cancelable
                           onStartRating={() => {
 
-                            setPropagation(false)
+                            //setPropagation(false)
 
-                            console.log("rating started");
+                            //console.log("rating started");
                             
-                            navigation.navigate("Rating",{data:{shopName:item.isim, shopId:item.id}})
-
+                            //navigation.navigate("Rating",{data:{shopName:item.isim, shopId:item.id}})
+                            return null
                             
                           }}
                           startingValue={item.rating}
                           fractions={20}
                           imageSize={16}
                           onFinishRating={() => {
-                            return null;
+                            return null
                           }}
                         />
                         

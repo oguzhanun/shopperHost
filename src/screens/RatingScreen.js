@@ -116,7 +116,7 @@ const RatingScreen = ({ navigation }) => {
               <View style={{ marginBottom: 5 }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
-                    HİZMET KALİTESİ:
+                    GÜLERYÜZ VE HOŞGÖRÜ:
                   </Text>
                   <Text style={{ fontWeight: "bold", marginLeft: 10 }}>
                     {props.values.slider2}

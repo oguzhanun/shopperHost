@@ -29,15 +29,15 @@ const CategoryScreen = ({ navigation }) => {
   const [connection, setConnection] = useState(false);
   const [foto, setFoto] = useState("fotograf")
 
-  const responder = PanResponder.create({
-    onMoveShouldSetPanResponder: (evt, gestureState) =>
-      Platform.OS === "ios" ? false : true,
-    onPanResponderMove: (evt, gestureState) => {
-      return Platform.OS === "ios" ? false : true;
-    },
-    onPanResponderTerminationRequest: (evt, gestureState) =>
-      Platform.OS === "ios" ? false : true
-  });
+  // const responder = PanResponder.create({
+  //   onMoveShouldSetPanResponder: (evt, gestureState) =>
+  //     Platform.OS === "ios" ? false : true,
+  //   onPanResponderMove: (evt, gestureState) => {
+  //     return Platform.OS === "ios" ? false : true;
+  //   },
+  //   onPanResponderTerminationRequest: (evt, gestureState) =>
+  //     Platform.OS === "ios" ? false : true
+  // });
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
@@ -83,7 +83,7 @@ const CategoryScreen = ({ navigation }) => {
 
 
         const result = await axiosInstance.get(
-          `/kategoriler/${kategori}`
+          `/kategoriler/${kategori}/${sehir}`
         );
 
         const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`)
@@ -100,8 +100,9 @@ const CategoryScreen = ({ navigation }) => {
     });
   }, [language]);
 
+  {/*{...responder.panHandlers} */}
   return (
-    <SafeAreaView style={{ flex: 1, marginTop: 5 }} {...responder.panHandlers}>
+  <SafeAreaView style={{ flex: 1, marginTop: 5 }} > 
       <NavigationEvents
         onDidFocus={() => {
           setLanguage(state.language);
@@ -118,9 +119,6 @@ const CategoryScreen = ({ navigation }) => {
           }}
         >
           <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{ color: "black", fontWeight: "bold" }}>
-            Please Check Your Internet Connection!
-          </Text>
         </View>
       )}
       <FlatList

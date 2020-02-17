@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Laklook",
+    "name": "LakLook",
     "slug": "applaklook",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "1.0.2",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -27,7 +27,9 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.keyplus.applaklak"
+      "package": "com.keyplus.applaklook",
+      "permissions" : [],
+      "versionCode": 3
     },
     "description": ""
   }

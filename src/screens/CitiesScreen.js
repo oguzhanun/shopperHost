@@ -54,9 +54,6 @@ const CitiesScreen = ({ navigation }) => {
           }}
         >
           <ActivityIndicator size="large" color="#00ff00" />
-          <Text style={{ color: "black", fontWeight: "bold" }}>
-            Please Check Your Internet Connection!
-          </Text>
         </View>
       )}
 

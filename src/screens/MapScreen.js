@@ -9,7 +9,7 @@ import { Linking } from "expo";
 const MapScreen = ({ navigation }) => {
   const shopsPosition = navigation.getParam("shopsPosition");
   const width = Dimensions.get("window").width;
-  const height = Dimensions.get("window").height;
+  const height = Dimensions.get("window").height-10;
   //console.log(shopsPosition)
 
   return (
@@ -21,14 +21,14 @@ const MapScreen = ({ navigation }) => {
           latitudeDelta: 10.0922,
           longitudeDelta: 15.0421
         }}
-        style={{ height }} 
+        style={{ height,width }} 
       >
         {shopsPosition.map(shop => {
           console.log(shop.konum.split(",")[0]);
 
           return (
             <Marker
-              key={shop.isim}
+              key={shop.isim + shop.konum}
               coordinate={{
                 latitude: parseFloat(shop.konum.split(",")[0]),
                 longitude: parseFloat(shop.konum.split(",")[1])

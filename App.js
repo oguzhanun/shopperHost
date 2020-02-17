@@ -20,7 +20,7 @@ const navigator = createBottomTabNavigator(
   {
     Stacks: createStackNavigator(
       {
-        Openning: OpenningScreen,
+        //Openning: OpenningScreen,
         Cities: CitiesScreen,
         Category: CategoryScreen,
         Shops: ShopsScreen,
@@ -31,7 +31,7 @@ const navigator = createBottomTabNavigator(
         //Settings: SettingsScreen,
       },
       {
-        initialRouteName: "Openning",
+        initialRouteName: "Cities",
         defaultNavigationOptions: {
           title:
               <Image
@@ -72,7 +72,7 @@ const navigator = createBottomTabNavigator(
                 }}
               >
                 <TouchableOpacity onPress={() => navigation.navigate("Cities")}>
-                  <AntDesign name="bars" size={30} color="red" />
+                  <AntDesign name="back" size={30} color="red" />
                 </TouchableOpacity>
               </View>
             );
