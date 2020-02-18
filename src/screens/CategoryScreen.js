@@ -28,6 +28,7 @@ const CategoryScreen = ({ navigation }) => {
   const heightOfScreen = Dimensions.get("window").height;
   const [connection, setConnection] = useState(false);
   const [foto, setFoto] = useState("fotograf")
+  const [kategoriLang, setKategoriLang] = useState("kategori_adi")
 
   // const responder = PanResponder.create({
   //   onMoveShouldSetPanResponder: (evt, gestureState) =>
@@ -51,39 +52,39 @@ const CategoryScreen = ({ navigation }) => {
           navigation.navigate("Category",{sehir})
         }
 
-        let kategori = "kategori_adi";
+        //let kategori = "kategori_adi";
 
         //Dil seçeneğine bağlı olarak yapılacak http talebi değişiyor.
         switch (language) {
           case "TR":
-            kategori = "kategori_adi";
+            setKategoriLang("kategori_adi")
             setFoto("fotograf")
             break;
           case "EN":
-            kategori = "kategori_adi_EN";
+            setKategoriLang("kategori_adi_EN")
             setFoto("fotograf_EN")
             break;
           case "AR":
-            kategori = "kategori_adi_AR";
+            setKategoriLang("kategori_adi_AR")
             setFoto("fotograf_AR")
             break;
           case "DE":
-            kategori = "kategori_adi_DE";
+            setKategoriLang("kategori_adi_DE")
             setFoto("fotograf_DE")
             break;
           case "RU":
-            kategori = "kategori_adi_RU";
+            setKategoriLang("kategori_adi_RU")
             setFoto("fotograf_RU")
             break;
           default:
-            kategori = "kategori_adi";
+            setKategoriLang("kategori_adi")
             setFoto("fotograf")
         }
 
 
 
         const result = await axiosInstance.get(
-          `/kategoriler/${kategori}/${sehir}`
+          `/kategoriler/${kategoriLang}/${sehir}`
         );
 
         const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`)
@@ -199,22 +200,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategori_adi_AR
-                                  ? kat.kategori_adi_AR.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_AR.substring(1)
-                                  : null || kat.kategori_adi_DE
-                                  ? kat.kategori_adi_DE.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_DE.substring(1)
-                                  : null || kat.kategori_adi_EN
-                                  ? kat.kategori_adi_EN.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_EN.substring(1)
-                                  : null || kat.kategori_adi_RU
-                                  ? kat.kategori_adi_RU.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_RU.substring(1)
-                                  : null || kat.kategori_adi
-                                  ? kat.kategori_adi.charAt(0).toUpperCase() +
-                                    kat.kategori_adi.substring(1)
-                                  : null}
+                                {kat[kategoriLang]}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -281,22 +267,7 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485
                                 }}
                               >
-                                {kat.kategori_adi_AR
-                                  ? kat.kategori_adi_AR.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_AR.substring(1)
-                                  : null || kat.kategori_adi_DE
-                                  ? kat.kategori_adi_DE.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_DE.substring(1)
-                                  : null || kat.kategori_adi_EN
-                                  ? kat.kategori_adi_EN.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_EN.substring(1)
-                                  : null || kat.kategori_adi_RU
-                                  ? kat.kategori_adi_RU.charAt(0).toUpperCase() +
-                                    kat.kategori_adi_RU.substring(1)
-                                  : null || kat.kategori_adi
-                                  ? kat.kategori_adi.charAt(0).toUpperCase() +
-                                    kat.kategori_adi.substring(1)
-                                  : null}
+                                {kat[kategoriLang]}
                               </Text>
                             </View>
                           </TouchableOpacity>
