@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, Image, PanResponder, Dimensions } from "react-native";
+import { View, Text, Image, Dimensions } from "react-native";
 import axiosInstance from "../api/axiosInstance";
-import { FlatList, TouchableOpacity, TouchableHighlight } from "react-native-gesture-handler";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
@@ -21,63 +21,41 @@ const ShopsScreen = ({ navigation }) => {
   const [active, setActivity] = useState(true)
   const [shopsPosition, setShopsPosition] = useState();
 
-  // const responder = PanResponder.create({
-  //   onMoveShouldSetPanResponder: (evt, gestureState) => true,
-  //   onPanResponderMove: (evt, gestureState) => {
-  //     return true;
-  //   },
-  //   onPanResponderTerminationRequest: (evt, gestureState) => true
-  // });
-
   useEffect(() => {
-    //navigation.navigate("Shops", { lang: state.language });
-
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         const { sehir, kategori } = navigation.getParam("data");
-
         if (sehir) {
           await setSehir(sehir);
         }
         if (kategori) {
           await setCategory(kategori);
         }
-
-        console.log("şehir ::::>>>>", sehir)
         const result = await axiosInstance.get(
           `/dukkanlar/${sehir}/${kategori}`
         );
-
         const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}/${kategori}`)
-        
         if(result2.data){
           setShopsPosition(result2.data)
         }
-
         if (result.data) {
           await setShops(result.data);
-          console.log("Shops Info: ", result.data);
         }
       } 
     });
   }, [propagation]);
 
-  {/*{...responder.panHandlers} */}
-{/* {shops.length === 0 ? <Text style={{textAlign:"center"}}>Üzgünüz! Henüz bu kategoride bir içerik eklenmemiştir...</Text> : null } */}
-  
 return (
     <SafeAreaView forceInset={{top:"never"}} style={{flex:1, marginTop: 10 }}> 
       <NavigationEvents
         onDidFocus={() => {
           setPropagation(true)
           setActivity(true)
-          //navigation.navigate("Shops", { lang: state.language });
         }}
         onDidBlur={()=>{
           setActivity(false)
         }}
       />
-      
       <FlatList
         data={shops}
         keyExtractor={item => {
@@ -146,11 +124,7 @@ return (
                     </Text>
                     <TouchableOpacity
                       onPress={() => {
-                        // setTimeout(()=>{
-                        //   navigation.navigate("Shops")
-                        // },500)
                         Linking.openURL(`tel:${item.telefon}`);
-                        
                       }}
                     >
                       <View>
@@ -207,18 +181,10 @@ return (
                           zIndex:10
                         }}
                       >
-                        
                         <Rating
                           cancelable
                           onStartRating={() => {
-
-                            //setPropagation(false)
-
-                            //console.log("rating started");
-                            
-                            //navigation.navigate("Rating",{data:{shopName:item.isim, shopId:item.id}})
                             return null
-                            
                           }}
                           startingValue={item.rating}
                           fractions={20}
@@ -227,11 +193,9 @@ return (
                             return null
                           }}
                         />
-                        
                           <Text style={{ marginLeft: 5, fontSize: 12 }}>
                             ({item.rating != null ? parseFloat(item.rating).toFixed(2) : null })
                           </Text>
-                        
                       </View>
                       <View
                         style={{
@@ -292,7 +256,6 @@ return (
               padding:0,
               borderBottomWidth:2,
               borderRadius: 10,
-              
             }}
           />
         </TouchableOpacity>
@@ -301,34 +264,12 @@ return (
   );
 };
 
-ShopsScreen.navigationOptions = ({ navigation }) => {
+ShopsScreen.navigationOptions = ( ) => {
   return {
     headerRight: () => (
       <View style={{flexDirection:"row", justifyContent:"space-between"}}>
-        {/* <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Settings");
-          }}
-        >
-          <View
-            style={{
-              marginRight: 10,
-              borderColor: "grey",
-              borderWidth: 0,
-              padding: 0,
-              borderRadius: 4
-            }}
-          >
-            <MaterialIcons
-              name="settings"
-              style={{ color: "green" }}
-              size={30}
-            />
-          </View>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
-            //navigation.navigate("Settings"); send?text=hello&
             Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
               supported => {
                 if (supported) {
@@ -351,8 +292,6 @@ ShopsScreen.navigationOptions = ({ navigation }) => {
               borderRadius: 4
             }}
           >
-            {/* <Text>{navigation.getParam("lang")}</Text> */}
-            {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
             <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
           </View>
         </TouchableOpacity>

@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { Text, Picker, View, Dimensions, AsyncStorage } from "react-native";
 import LanguageContext from "../contexts/LanguageContext";
 import SafeAreaView from "react-native-safe-area-view";
-//import * as SQLite from "expo-sqlite";
 
 
 const SettingsScreen = () => {
@@ -26,37 +25,10 @@ const SettingsScreen = () => {
           onValueChange={async (itemValue, itemIndex) => {
             changeLanguage(itemValue);
             await AsyncStorage.setItem("deviceLang",itemValue)
-
-            // const db = await SQLite.openDatabase("applaklak");
-
-            // await db.transaction(
-            //   tx => {
-            //     tx.executeSql(
-            //       "create table if not exists ayar1 (id integer primary key not null, language TEXT unique);"
-            //     );
-            //   },
-            //   (err, succ) => {
-            //     if (err) {
-            //       console.log(err);
-            //     }
-            //   }
-            // );
-
-            // await db.transaction(tx => {
-            //   tx.executeSql(`update ayar1 set language=? where id=1;`, [itemValue]);
-            //   console.log("ITEM VALUE:",itemValue)
-            // });
-
-            // await db.transaction(tx => tx.executeSql(`select * from ayar1;`, [], async (tx, set) => {
-            //     console.log("set-->:",set)
-            //   })
-            // ) 
           }}
         >
           <Picker.Item label="Türkçe" value="TR" />
           <Picker.Item label="English" value="EN" />
-          {/* <Picker.Item label="Deutsch" value="DE" />
-          <Picker.Item label="русский" value="RU" /> */}
           <Picker.Item label="العربية" value="AR" />
         </Picker>
       </View>

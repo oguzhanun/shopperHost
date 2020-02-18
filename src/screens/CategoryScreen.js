@@ -1,22 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  PanResponder,
-  ActivityIndicator,
-  Platform
-} from "react-native";
+import { View, Text, Image, Dimensions, ActivityIndicator } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import axiosInstance from "../api/axiosInstance";
 import NetInfo from "@react-native-community/netinfo";
 import LanguageContext from "../contexts/LanguageContext";
 import { NavigationEvents } from "react-navigation";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SafeAreaView from "react-native-safe-area-view";
 import { Linking } from "expo";
-import { Header } from "react-native/Libraries/NewAppScreen";
 
 const CategoryScreen = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
@@ -27,83 +18,59 @@ const CategoryScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
   const heightOfScreen = Dimensions.get("window").height;
   const [connection, setConnection] = useState(false);
-  const [foto, setFoto] = useState("fotograf")
-  const [kategoriLang, setKategoriLang] = useState("kategori_adi")
-
-  // const responder = PanResponder.create({
-  //   onMoveShouldSetPanResponder: (evt, gestureState) =>
-  //     Platform.OS === "ios" ? false : true,
-  //   onPanResponderMove: (evt, gestureState) => {
-  //     return Platform.OS === "ios" ? false : true;
-  //   },
-  //   onPanResponderTerminationRequest: (evt, gestureState) =>
-  //     Platform.OS === "ios" ? false : true
-  // });
+  const [foto, setFoto] = useState("fotograf");
+  const [kategoriLang, setKategoriLang] = useState("kategori_adi");
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         setConnection(true);
-
-        const {sehir} = navigation.getParam("data");
-
+        const { sehir } = navigation.getParam("data");
         if (sehir) {
           await setSehir(sehir);
-          navigation.navigate("Category",{sehir})
+          navigation.navigate("Category", { sehir });
         }
-
-        //let kategori = "kategori_adi";
-
-        //Dil seçeneğine bağlı olarak yapılacak http talebi değişiyor.
         switch (language) {
           case "TR":
-            setKategoriLang("kategori_adi")
-            setFoto("fotograf")
+            setKategoriLang("kategori_adi");
+            setFoto("fotograf");
             break;
           case "EN":
-            setKategoriLang("kategori_adi_EN")
-            setFoto("fotograf_EN")
+            setKategoriLang("kategori_adi_EN");
+            setFoto("fotograf_EN");
             break;
           case "AR":
-            setKategoriLang("kategori_adi_AR")
-            setFoto("fotograf_AR")
+            setKategoriLang("kategori_adi_AR");
+            setFoto("fotograf_AR");
             break;
           case "DE":
-            setKategoriLang("kategori_adi_DE")
-            setFoto("fotograf_DE")
+            setKategoriLang("kategori_adi_DE");
+            setFoto("fotograf_DE");
             break;
           case "RU":
-            setKategoriLang("kategori_adi_RU")
-            setFoto("fotograf_RU")
+            setKategoriLang("kategori_adi_RU");
+            setFoto("fotograf_RU");
             break;
           default:
-            setKategoriLang("kategori_adi")
-            setFoto("fotograf")
+            setKategoriLang("kategori_adi");
+            setFoto("fotograf");
         }
-
-
-
         const result = await axiosInstance.get(
           `/kategoriler/${kategoriLang}/${sehir}`
         );
-
-        const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`)
-        
-        if(result2.data){
-          setShopsPosition(result2.data)
+        const result2 = await axiosInstance.get(`/dukkanKonumlari/${sehir}`);
+        if (result2.data) {
+          setShopsPosition(result2.data);
         }
-
         if (result.data) {
           setCategories(result.data);
-          console.log("YENI KATEGORILER : ", result.data);
         }
       }
     });
   }, [language]);
 
-  {/*{...responder.panHandlers} */}
   return (
-  <SafeAreaView style={{ flex: 1, marginTop: 5 }} > 
+    <SafeAreaView style={{ flex: 1, marginTop: 5 }}>
       <NavigationEvents
         onDidFocus={() => {
           setLanguage(state.language);
@@ -151,9 +118,7 @@ const CategoryScreen = ({ navigation }) => {
                   {categories
                     .slice(0, Math.ceil(categories.length / 2))
                     .map(kat => {
-                      //let source;
-                      let specialHeight = heightOfScreen * 0.25
-                      
+                      let specialHeight = heightOfScreen * 0.25;
                       return (
                         <View
                           key={kat.kategori_adi.toString()}
@@ -183,16 +148,18 @@ const CategoryScreen = ({ navigation }) => {
                                   borderTopLeftRadius: 4,
                                   borderTopRightRadius: 4,
                                   width: widthOfScreen * 0.485,
-                                  height: specialHeight //heightOfScreen * 0.2
+                                  height: specialHeight
                                 }}
-                                source={{uri:`http://37.247.107.18:1818${kat[foto]}`}}
+                                source={{
+                                  uri: `http://37.247.107.18:1818${kat[foto]}`
+                                }}
                               />
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  color: "white",  //gold
+                                  color: "white",
                                   zIndex: 1,
-                                  backgroundColor: "#43862F", //#aaa
+                                  backgroundColor: "#43862F",
                                   paddingHorizontal: widthOfScreen * 0.0243,
                                   paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
@@ -221,9 +188,7 @@ const CategoryScreen = ({ navigation }) => {
                   {categories
                     .slice(Math.ceil(categories.length / 2), categories.length)
                     .map(kat => {
-                      //let source;
-                      let specialHeight = heightOfScreen * 0.25
-                      
+                      let specialHeight = heightOfScreen * 0.25;
                       return (
                         <View
                           key={kat.kategori_adi.toString()}
@@ -243,7 +208,6 @@ const CategoryScreen = ({ navigation }) => {
                             }}
                           >
                             <View style={{ margin: 5 }}>
-                              {/* <Text>{kat.kategori}</Text> */}
                               <Image
                                 style={{
                                   resizeMode: "stretch",
@@ -252,14 +216,16 @@ const CategoryScreen = ({ navigation }) => {
                                   width: widthOfScreen * 0.485,
                                   height: specialHeight
                                 }}
-                                source={{uri:`http://37.247.107.18:1818${kat[foto]}`}}
+                                source={{
+                                  uri: `http://37.247.107.18:1818${kat[foto]}`
+                                }}
                               />
                               <Text
                                 style={{
                                   fontWeight: "bold",
-                                  color: "white", //gold
+                                  color: "white",
                                   zIndex: 1,
-                                  backgroundColor: "#43862F",  //#aaa
+                                  backgroundColor: "#43862F",
                                   paddingHorizontal: widthOfScreen * 0.0243,
                                   paddingVertical: heightOfScreen * 0.00365,
                                   borderBottomLeftRadius: 4,
@@ -280,30 +246,26 @@ const CategoryScreen = ({ navigation }) => {
           );
         }}
       />
-      <View style={{position: "absolute",
-              zIndex: 1,
-              bottom: 10,
-              right: 10}}>
-        <TouchableOpacity onPress={()=>{
-          navigation.navigate("Map", {shopsPosition})
-        }}>
+      <View style={{ position: "absolute", zIndex: 1, bottom: 10, right: 10 }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Map", { shopsPosition });
+          }}
+        >
           <MaterialCommunityIcons
             name="map-marker-multiple"
             color="#4E9A32"
             size={50}
             style={{
               backgroundColor: "transparent",
-              borderBottomColor:"white",
-              padding:0,
-              borderBottomWidth:2,
-              borderRadius: 10,
-              
+              borderBottomColor: "white",
+              padding: 0,
+              borderBottomWidth: 2,
+              borderRadius: 10
             }}
           />
         </TouchableOpacity>
       </View>
-      
-      
     </SafeAreaView>
   );
 };
@@ -313,7 +275,6 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          //navigation.navigate("Settings"); send?text=hello&
           Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
             supported => {
               if (supported) {
@@ -325,8 +286,7 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
                 );
             }
           );
-        }
-      }
+        }}
       >
         <View
           style={{
@@ -337,67 +297,16 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
             borderRadius: 4
           }}
         >
-          {/* <Text>{navigation.getParam("lang")}</Text> */}
-          {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
           <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
         </View>
       </TouchableOpacity>
     ),
-    
-    headerTitle:<Text style={{color:"#43862F", fontWeight:"bold", fontSize:22}}>{navigation.getParam("sehir")}</Text>,
-
-    headerStyle:{
-      //
-    }
-    // titleStyle:{
-    //   //backgroundColor:"green",
-    //   margin:0,
-    //   padding:0,
-    //   top:-3,
-    //   left:-15,
-    //   width:80,
-    //   height:80  
-    // }
-  }
+    headerTitle: (
+      <Text style={{ color: "#43862F", fontWeight: "bold", fontSize: 22 }}>
+        {navigation.getParam("sehir")}
+      </Text>
+    )
+  };
 };
 
 export default CategoryScreen;
-
-
-// switch (kat.kategori.toLowerCase().replace(" ", "")) {
-//   case "mobilya":
-//     source = require("../../assets/images/kategoriler/mobilya.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "çikolata":
-//     source = require("../../assets/images/kategoriler/cikolata.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "genelalışveriş":
-//     source = require("../../assets/images/kategoriler/genel.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "turistik":
-//     source = require("../../assets/images/kategoriler/geziyeri.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "hediyelik":
-//     source = require("../../assets/images/kategoriler/hediyelik.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "mücevher":
-//     source = require("../../assets/images/kategoriler/mucevher.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "giyim":
-//     source = require("../../assets/images/kategoriler/giyim.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   case "züccaciye":
-//     source = require("../../assets/images/kategoriler/zuccaciye.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-//     break;
-//   default:
-//     source = require("../../assets/images/kategoriler/genel.jpg");
-//     specialHeight = heightOfScreen * 0.25;
-// }

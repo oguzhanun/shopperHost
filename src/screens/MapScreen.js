@@ -1,16 +1,14 @@
 import React from "react";
-import { Text, View, Dimensions } from "react-native";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { View, Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
-import SafeAreaView from "react-native-safe-area-view";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Linking } from "expo";
 
 const MapScreen = ({ navigation }) => {
   const shopsPosition = navigation.getParam("shopsPosition");
   const width = Dimensions.get("window").width;
   const height = Dimensions.get("window").height;
-  //console.log(shopsPosition)
 
   return (
     <View style={{flex:1}}>
@@ -24,8 +22,6 @@ const MapScreen = ({ navigation }) => {
         style={{ height,width }} 
       >
         {shopsPosition.map(shop => {
-          console.log(shop.konum.split(",")[0]);
-
           return (
             <Marker
               key={shop.isim + shop.konum}
@@ -34,7 +30,6 @@ const MapScreen = ({ navigation }) => {
                 longitude: parseFloat(shop.konum.split(",")[1])
               }}
               title={shop.isim}
-              description={"marker.description"}
             />
           );
         })}
@@ -43,12 +38,11 @@ const MapScreen = ({ navigation }) => {
   );
 };
 
-MapScreen.navigationOptions = ({ navigation }) => {
+MapScreen.navigationOptions = ( ) => {
   return {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          //navigation.navigate("Settings"); send?text=hello&
           Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
             supported => {
               if (supported) {
@@ -71,8 +65,6 @@ MapScreen.navigationOptions = ({ navigation }) => {
             borderRadius: 4
           }}
         >
-          {/* <Text>{navigation.getParam("lang")}</Text> */}
-          {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
           <MaterialCommunityIcons name="whatsapp" color="green" size={38} />
         </View>
       </TouchableOpacity>

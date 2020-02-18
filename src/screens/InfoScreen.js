@@ -6,8 +6,8 @@ import {
   AsyncStorage,
   ScrollView
 } from "react-native";
-import { Card, Button, Text, Badge } from "react-native-elements";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { Card, Text, Badge } from "react-native-elements";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import SafeAreaView from "react-native-safe-area-view";
 import NetInfo from "@react-native-community/netinfo";
 import axiosInstance from "../api/axiosInstance";
@@ -31,19 +31,15 @@ const InfoScreen = ({ navigation }) => {
   const itemWidth = sliderWidth;
   const [index, setIndex] = useState(0);
   const [tap, setTap] = useState({});
-  const [shopName, setShopName] = useState();
-
+  
   useEffect(() => {
     NetInfo.fetch().then(async state => {
       console.log("Async Storage :", await AsyncStorage.getItem("deviceLang"));
       if (state.isConnected) {
         const { shopId } = navigation.getParam("data");
-
         const result = await axiosInstance.get(`/dukkan/${shopId}`);
-
         if (result.data) {
           let dataAdjusted = result.data;
-
           switch (language) {
             case "TR":
               dataAdjusted = result.data;
@@ -51,40 +47,31 @@ const InfoScreen = ({ navigation }) => {
             case "EN":
               dataAdjusted = result.data.map(dat => {
                 if (dat.bilgiEN) dat.bilgi = dat.bilgiEN;
-                //delete dat.kategoriEN;
                 return dat;
               });
               break;
             case "AR":
               dataAdjusted = result.data.map(dat => {
                 if (dat.bilgiAR) dat.bilgi = dat.bilgiAR;
-                //delete dat.kategoriAR;
                 return dat;
               });
               break;
             case "DE":
               dataAdjusted = result.data.map(dat => {
                 if (dat.bilgiDE) dat.bilgi = dat.bilgiDE;
-                //delete dat.kategoriDE;
                 return dat;
               });
               break;
             case "RU":
               dataAdjusted = result.data.map(dat => {
                 if (dat.bilgiRU) dat.bilgi = dat.bilgiRU;
-                //delete dat.kategoriRU;
                 return dat;
               });
               break;
             default:
               dataAdjusted = result.data;
           }
-
-          console.log("DÜKKAN : ", dataAdjusted);
           setThePlace(dataAdjusted[0]);
-          setShopName(thePlace.isim);
-          console.log("isim", thePlace.isim);
-          console.log("SHOPNAME:", shopName);
         }
       }
     });
@@ -107,19 +94,7 @@ const InfoScreen = ({ navigation }) => {
           setLanguage(state.language);
         }}
       />
-      <FlatList
-        style={{
-          marginVertical: 0,
-          borderColor: "red",
-          borderWidth: 0
-        }}
-        data={[{ category: "hi" }]}
-        keyExtractor={(item, index) => {
-          return index.toString();
-        }}
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => {
-          return (
+      <ScrollView nestedScrollEnabled={true}  showsVerticalScrollIndicator={false}>
             <View
               style={{
                 flex: 1,
@@ -147,7 +122,7 @@ const InfoScreen = ({ navigation }) => {
                     { resim: thePlace.resim2 },
                     { resim: thePlace.resim3 }
                   ]}
-                  renderItem={({ item, index }, parallaxProps) => {
+                  renderItem={({ item, index }) => {
                     return (
                       <View
                         style={{
@@ -202,13 +177,11 @@ const InfoScreen = ({ navigation }) => {
                   tappableDots={true}
                   carouselRef={tap}
                 />
-
                 <Card
                   containerStyle={{
                     marginHorizontal: 0,
                     borderRadius: 10,
                     position: "relative"
-                    // bottom: 0, backgroundColor:"#efefef"
                   }}
                 >
                   <Badge
@@ -217,7 +190,7 @@ const InfoScreen = ({ navigation }) => {
                         style={{
                           backgroundColor: `${
                             thePlace.indirim ? "#F4AD33" : "transparent"
-                          }`, //#E93F33
+                          }`,
                           opacity: 1,
                           color: "white",
                           borderRadius: 15,
@@ -236,7 +209,6 @@ const InfoScreen = ({ navigation }) => {
                     }}
                     badgeStyle={{ backgroundColor: "transparent" }}
                   />
-
                   <View
                     style={{
                       height: height * 0.38,
@@ -245,7 +217,7 @@ const InfoScreen = ({ navigation }) => {
                       borderWidth: 0
                     }}
                   >
-                    <ScrollView showsVerticalScrollIndicator={false}>
+                    <ScrollView nestedScrollEnabled={true} showsVerticalScrollIndicator={false}>
                       <View style={{ marginHorizontal: 5 }}>
                         <Text
                           style={{
@@ -257,7 +229,6 @@ const InfoScreen = ({ navigation }) => {
                         >
                           {thePlace.isim}
                         </Text>
-
                         <View
                           style={{
                             marginTop: 10,
@@ -280,7 +251,7 @@ const InfoScreen = ({ navigation }) => {
                             }}
                           >
                             <Rating
-                              onStartRating={()=>{
+                              onStartRating={() => {
                                 navigation.navigate("Rating", {
                                   data: {
                                     shopName: thePlace.isim,
@@ -296,7 +267,6 @@ const InfoScreen = ({ navigation }) => {
                               }}
                             />
                           </TouchableOpacity>
-
                           <Text style={{ marginLeft: 5, fontSize: 12 }}>
                             (
                             {thePlace.rating != null
@@ -305,14 +275,11 @@ const InfoScreen = ({ navigation }) => {
                             )
                           </Text>
                         </View>
-
                         <View style={{ marginVertical: 10 }}></View>
-
                         <Text style={{ color: "black", textAlign: "auto" }}>
                           {thePlace.bilgi}
                         </Text>
                         <View style={{ marginVertical: 10 }}></View>
-
                         <TouchableOpacity
                           onPress={e => {
                             Linking.openURL(`tel:${thePlace.telefon}`);
@@ -340,7 +307,7 @@ const InfoScreen = ({ navigation }) => {
                                     fontWeight: "bold"
                                   }}
                                 >
-                                  {item.telefon}
+                                  {thePlace.telefon}
                                 </Text>
                               </View>
                             )}
@@ -348,7 +315,6 @@ const InfoScreen = ({ navigation }) => {
                         </TouchableOpacity>
                       </View>
                     </ScrollView>
-
                     <View
                       style={{
                         position: "absolute",
@@ -389,39 +355,15 @@ const InfoScreen = ({ navigation }) => {
                 </Card>
               </Card>
             </View>
-          );
-        }}
-      />
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 InfoScreen.navigationOptions = ({ navigation }) => {
   return {
-    // headerRight:  () => <View style={{marginRight:10}}><Text>{navigation.getParam("lang")}</Text></View>
     headerRight: () => (
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        {/* <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Settings");
-          }}
-        >
-          <View
-            style={{
-              marginRight: 10,
-              borderColor: "grey",
-              borderWidth: 0,
-              padding: 0,
-              borderRadius: 4
-            }}
-          >
-            <MaterialIcons
-              name="settings"
-              style={{ color: "green" }}
-              size={30}
-            />
-          </View>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
@@ -447,8 +389,6 @@ InfoScreen.navigationOptions = ({ navigation }) => {
               borderRadius: 4
             }}
           >
-            {/* <Text>{navigation.getParam("lang")}</Text> */}
-            {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
             <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
           </View>
         </TouchableOpacity>

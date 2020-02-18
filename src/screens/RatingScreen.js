@@ -1,14 +1,9 @@
 import React from "react";
-import { Text, View, Label } from "react-native";
+import { Text, View } from "react-native";
 import { Formik } from "formik";
 import { Slider, Button } from "react-native-elements";
-//import Slider from "@react-native-community/slider"
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  MaterialIcons,
-  Feather,
-  MaterialCommunityIcons
-} from "@expo/vector-icons";
+import {  MaterialCommunityIcons} from "@expo/vector-icons";
 import { Linking } from "expo";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import axios from "axios";
@@ -47,20 +42,14 @@ const RatingScreen = ({ navigation }) => {
             slider4: 5,
             slider5: 5
           }}
-          onValueChange={values => {
-            console.log(values);
-          }}
           onSubmit={ async values => {
-            console.log(values);
             let toplam = 0;
             let ortalama = 0;
 
             for (let i in values) {
               toplam = toplam + values[i];
-              console.log(values[i]);
             }
             ortalama = toplam / 5;
-            console.log("ORTALAMA:", ortalama);
             const response = await axios("http://37.247.107.18:1818/ratings/give/rate",{
               method:"post",
               data:{
@@ -71,11 +60,9 @@ const RatingScreen = ({ navigation }) => {
                 rateGiverId:55
               }
             })
-            console.log("Response : ",response.data)
             if(response.data == "ok"){
               navigation.goBack()
             }
-
           }}
         >
           {props => (
@@ -89,9 +76,7 @@ const RatingScreen = ({ navigation }) => {
                     {props.values.slider1}
                   </Text>
                 </View>
-
                 <Slider
-                  //thumbStyle={{justifyContent:"center", borderWidth:1, borderColor:"red"}}
                   style={{
                     backgroundColor: "grey",
                     borderWidth:0, borderColor:"red",
@@ -105,7 +90,6 @@ const RatingScreen = ({ navigation }) => {
                   minimumTrackTintColor="gold"
                   maximumTrackTintColor="grey"
                   thumbTintColor="gold"
-                  
                   step={1}
                   minimumValue={0}
                   maximumValue={5}
@@ -151,7 +135,6 @@ const RatingScreen = ({ navigation }) => {
                     {props.values.slider3}
                   </Text>
                 </View>
-
                 <Slider
                   thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
@@ -181,7 +164,6 @@ const RatingScreen = ({ navigation }) => {
                     {props.values.slider4}
                   </Text>
                 </View>
-
                 <Slider
                   thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
@@ -211,7 +193,6 @@ const RatingScreen = ({ navigation }) => {
                     {props.values.slider5}
                   </Text>
                 </View>
-
                 <Slider
                   thumbTouchSize={{width:200, height:100}}
                   minimumTrackTintColor="gold"
@@ -237,7 +218,6 @@ const RatingScreen = ({ navigation }) => {
                   marginTop: 30,
                   marginHorizontal: 10,
                   borderRadius: 10,
-
                   color: "black",
                   borderColor: "red",
                   borderWidth: 0,
@@ -258,13 +238,12 @@ const RatingScreen = ({ navigation }) => {
   );
 };
 
-RatingScreen.navigationOptions = ({ navigation }) => {
+RatingScreen.navigationOptions = ( ) => {
   return {
     headerRight: () => (
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TouchableOpacity
           onPress={() => {
-            //navigation.navigate("Settings"); send?text=hello&
             Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
               supported => {
                 if (supported) {
@@ -287,8 +266,6 @@ RatingScreen.navigationOptions = ({ navigation }) => {
               borderRadius: 4
             }}
           >
-            {/* <Text>{navigation.getParam("lang")}</Text> */}
-            {/* <MaterialIcons name="settings" style={{ color: "grey" }} size={30} /> */}
             <MaterialCommunityIcons name="whatsapp" color="#43862F" size={38} />
           </View>
         </TouchableOpacity>

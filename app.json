@@ -9,7 +9,7 @@
       "android",
       "web"
     ],
-    "version": "2.0.2",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,13 +28,13 @@
     },
     "android": {
       "package": "com.keyplus.applaklak",
-      "config":{
+      "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBW-YcbazqPvo7-JY-bxocMGXFI0nirbho"
         }
       },
-      "permissions" : [],
-      "versionCode": 4
+      "permissions": [],
+      "versionCode": 5
     },
     "description": ""
   }
