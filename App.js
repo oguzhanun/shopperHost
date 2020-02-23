@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
-import OpenningScreen from "./src/screens/OpenningScreen";
+//import OpenningScreen from "./src/screens/OpenningScreen";
 import CitiesScreen from "./src/screens/CitiesScreen";
 import CategoryScreen from "./src/screens/CategoryScreen";
 import ShopsScreen from "./src/screens/ShopsScreen";
@@ -68,7 +68,6 @@ const navigator = createBottomTabNavigator(
                 style={{
                   borderColor: "green",
                   borderWidth: 0
-                  //backgroundColor: "yellow"
                 }}
               >
                 <TouchableOpacity onPress={() => navigation.navigate("Cities")}>

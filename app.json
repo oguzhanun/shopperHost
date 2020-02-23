@@ -24,6 +24,8 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber":"2.0.3",
+      "bundleIdentifier": "com.keyplus.applaklak",
       "supportsTablet": true
     },
     "android": {
