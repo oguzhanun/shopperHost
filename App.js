@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image,Dimensions } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 //import OpenningScreen from "./src/screens/OpenningScreen";
@@ -15,9 +15,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Linking } from "expo";
 import MapScreen from "./src/screens/MapScreen"
 import RatingScreen from "./src/screens/RatingScreen";
+import ImageResizeMode from 'react-native/Libraries/Image/ImageResizeMode'
 
 const navigator = createBottomTabNavigator(
+  
   {
+    
     Stacks: createStackNavigator(
       {
         //Openning: OpenningScreen,
@@ -36,29 +39,49 @@ const navigator = createBottomTabNavigator(
           title:
               <Image
                 style={{
-                  position:"relative",
+                  // position:"absolute",
+                  margin:0,
+                  padding:0,
                   resizeMode:"contain",
-                  borderColor: "red",
-                  borderWidth: 1,
-                  width: 50,
-                  height: 50
+                  borderColor: "green",
+                  borderWidth: 0,
+                  flex:1,
+                  width: 40,
+                  height: 40
+                  
+                  
                 }}
                 source={require("./assets/status.png")}
               />,
-            headerTitleStyle:{
-              //backgroundColor:"green",
-              margin:0,
-              padding:0,
-              top:-3,
-              left:-15,
-              width:80,
-              height:80  
-            }
+          
+          headerTitleStyle:{
+            //backgroundColor:"green",
+            margin:0,
+            padding:0,
+            // borderColor: "green",
+            //       borderWidth: 1,
+            top:0, // 737
+            left:Dimensions.get("window").width * 0.08, //0.0724,
+            width:100,
+            height:100  
+          },
+
+          headerLeftContainerStyle:{
+            // top:20,
+            // width:100,
+            // height:100,
+            borderColor: "red",
+            borderWidth: 0,
+            margin:0,
+            padding:0
+            
+            
+          }
             
         },
 
         navigationOptions: ({ navigation }) => ({
-          title: "Laklak",
+          title: "LakLook",
           tabBarOnPress: () => {
             navigation.navigate("Cities");
           },
@@ -83,6 +106,7 @@ const navigator = createBottomTabNavigator(
       screen: SettingsScreen,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: () => {
+          
           return (
             <View
               style={{

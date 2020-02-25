@@ -393,6 +393,11 @@ InfoScreen.navigationOptions = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </View>
+    ),
+    headerTitle: (
+      <Text style={{ color: "#43862F", fontWeight: "bold", fontSize: 22 }}>
+        
+      </Text>
     )
   };
 };

@@ -68,6 +68,11 @@ MapScreen.navigationOptions = ( ) => {
           <MaterialCommunityIcons name="whatsapp" color="green" size={38} />
         </View>
       </TouchableOpacity>
+    ),
+    headerTitle: (
+      <Text style={{ color: "#43862F", fontWeight: "bold", fontSize: 22 }}>
+        
+      </Text>
     )
   };
 };
