@@ -132,7 +132,6 @@ const CategoryScreen = ({ navigation }) => {
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
                             onPress={() => {
-                              console.log(View.props);
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
@@ -197,8 +196,7 @@ const CategoryScreen = ({ navigation }) => {
                           <TouchableOpacity
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
-                            onPress={Event => {
-                              console.log("PROPS----->", Event);
+                            onPress={ () => {
                               navigation.navigate("Shops", {
                                 data: {
                                   sehir: sehir,
@@ -275,10 +273,10 @@ CategoryScreen.navigationOptions = ({ navigation }) => {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
+          Linking.canOpenURL("https://wa.me/905383505515").then(
             supported => {
               if (supported) {
-                Linking.openURL("whatsapp://send?phone=+905383505515");
+                Linking.openURL("https://wa.me/905383505515");
               } else
                 Alert.alert(
                   "Uyarı",

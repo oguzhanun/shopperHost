@@ -116,6 +116,7 @@ const InfoScreen = ({ navigation }) => {
                 }}
               >
                 <Carousel
+                  removeClippedSubviews={false}
                   ref={c => setTap(c)}
                   data={[
                     { resim: thePlace.resim1 },
@@ -367,10 +368,10 @@ InfoScreen.navigationOptions = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             //navigation.navigate("Settings"); send?text=hello&
-            Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
+            Linking.canOpenURL("https://wa.me/905383505515").then(
               supported => {
                 if (supported) {
-                  Linking.openURL("whatsapp://send?phone=+905383505515");
+                  Linking.openURL("https://wa.me/905383505515");
                 } else
                   Alert.alert(
                     "Uyarı",

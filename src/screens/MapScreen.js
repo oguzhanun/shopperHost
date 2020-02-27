@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions,Text } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MapView, { Marker } from "react-native-maps";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -43,10 +43,10 @@ MapScreen.navigationOptions = ( ) => {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
+          Linking.canOpenURL("https://wa.me/905383505515").then(
             supported => {
               if (supported) {
-                Linking.openURL("whatsapp://send?phone=+905383505515");
+                Linking.openURL("https://wa.me/905383505515")
               } else
                 Alert.alert(
                   "Uyarı",

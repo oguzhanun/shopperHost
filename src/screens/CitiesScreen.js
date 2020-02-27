@@ -13,6 +13,7 @@ import LanguageContext from "../contexts/LanguageContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SafeAreaView from "react-native-safe-area-view";
 import { Linking } from "expo";
+import { NavigationEvents } from "react-navigation";
 
 const CitiesScreen = ({ navigation }) => {
   const widthOfScreen = Dimensions.get("window").width;
@@ -20,6 +21,7 @@ const CitiesScreen = ({ navigation }) => {
   const [cities, setCities] = useState([]);
   const { state } = useContext(LanguageContext);
   const [connection, setConnection] = useState(false);
+  // const [ajax,setAjax] = useState(false)
 
   useEffect(() => {
     NetInfo.fetch().then(async state => {
@@ -27,8 +29,10 @@ const CitiesScreen = ({ navigation }) => {
         setConnection(true);
         const result = await axiosInstance.get("/sehirler");
         console.log(result.data)
+        //setAjax(false)
         if (result.data) {
           await setCities(result.data);
+          // setAjax(true)
         }
       }
     });
@@ -91,7 +95,6 @@ const CitiesScreen = ({ navigation }) => {
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
                             onPress={() => {
-                              console.log(View.props);
                               navigation.navigate("Category", {
                                 data: {
                                   sehir: city.sehir_adi
@@ -138,8 +141,7 @@ const CitiesScreen = ({ navigation }) => {
                           <TouchableOpacity
                             style={{ borderColor: "red", borderWidth: 0 }}
                             activeOpacity={0.8}
-                            onPress={Event => {
-                              console.log("PROPS----->", Event);
+                            onPress={ () => {
                               navigation.navigate("Category", {
                                 data: {
                                   sehir: city.sehir_adi
@@ -169,6 +171,13 @@ const CitiesScreen = ({ navigation }) => {
           );
         }}
       />
+      {/* <NavigationEvents
+        onDidFocus={()=>{
+          if(!ajax){
+            setAjax(true)
+          }
+        }}
+      /> */}
     </SafeAreaView>
   );
 };
@@ -178,10 +187,10 @@ CitiesScreen.navigationOptions = ( ) => {
     headerRight: () => (
       <TouchableOpacity
         onPress={() => {
-          Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
+          Linking.canOpenURL("https://wa.me/905383505515").then(
             supported => {
               if (supported) {
-                Linking.openURL("whatsapp://send?phone=+905383505515");
+                Linking.openURL("https://wa.me/905383505515"); //whatsapp://send?phone=+905383505515
               } else
                 Alert.alert(
                   "Uyarı",

@@ -5,7 +5,7 @@ import { Slider, Button } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {  MaterialCommunityIcons} from "@expo/vector-icons";
 import { Linking } from "expo";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableOpacity, ScrollView } from "react-native-gesture-handler";
 import axios from "axios";
 
 const RatingScreen = ({ navigation }) => {
@@ -14,7 +14,7 @@ const RatingScreen = ({ navigation }) => {
   
   return (
     <SafeAreaView forceInset={{ top: "never" }}>
-      <View>
+      <ScrollView>
         <View
           style={{
             borderColor: "purple",
@@ -216,6 +216,7 @@ const RatingScreen = ({ navigation }) => {
               <View
                 style={{
                   marginTop: 30,
+                  marginBottom:50,
                   marginHorizontal: 10,
                   borderRadius: 10,
                   color: "black",
@@ -233,7 +234,7 @@ const RatingScreen = ({ navigation }) => {
             </View>
           )}
         </Formik>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -244,10 +245,10 @@ RatingScreen.navigationOptions = ( ) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <TouchableOpacity
           onPress={() => {
-            Linking.canOpenURL("whatsapp://send?phone=+905383505515").then(
+            Linking.canOpenURL("https://wa.me/905383505515").then(
               supported => {
                 if (supported) {
-                  Linking.openURL("whatsapp://send?phone=+905383505515");
+                  Linking.openURL("https://wa.me/905383505515");
                 } else
                   Alert.alert(
                     "Uyarı",
